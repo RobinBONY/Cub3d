@@ -6,7 +6,7 @@
 /*   By: rbony <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/10 10:55:14 by rbony             #+#    #+#             */
-/*   Updated: 2022/08/11 12:30:42 by rbony            ###   ########lyon.fr   */
+/*   Updated: 2022/08/11 15:40:55 by rbony            ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@
 
 # define FNF            "File not found"
 # define PD             "Permission denied"
-# define INVALID_EXT    "File format is invalid"
+# define INVALID_FORMAT "File format is invalid"
 
 # define READING_FILE   "Error reading file"
 

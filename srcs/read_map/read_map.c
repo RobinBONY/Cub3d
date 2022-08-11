@@ -6,7 +6,7 @@
 /*   By: alakhdar <<marvin@42.fr>>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/10 17:08:31 by rbony             #+#    #+#             */
-/*   Updated: 2022/08/11 15:32:46 by alakhdar         ###   ########lyon.fr   */
+/*   Updated: 2022/08/11 16:18:05 by alakhdar         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,10 +39,85 @@ static t_list	*fill_map_list(char *mapname)
 	return (head);
 }
 
-/*static int	parse_textures(t_game *game, t_list **list)
+char	*find_keyword(char *line)
 {
-	
-}*/
+	char						*keyword;
+
+	keyword = ft_strstr(line, "NO ");
+	if (keyword)
+		return (keyword);
+	keyword = ft_strstr(line, "SO ");
+	if (keyword)
+		return (keyword);
+	keyword = ft_strstr(line, "EA ");
+	if (keyword)
+		return (keyword);
+	keyword = ft_strstr(line, "WE ");
+	if (keyword)
+		return (keyword);
+	keyword = ft_strstr(line, "F ");
+	if (keyword)
+		return (keyword);
+	keyword = ft_strstr(line, "C ");
+	if (keyword)
+		return (keyword);
+	return (NULL);
+}
+
+void	free_split(char **split)
+{
+	int	i;
+
+	i = -1;
+	while (split[++i])
+		free(split[i]);
+	free(split);
+}
+
+int	split_size(char **split)
+{
+	int	i;
+
+	i = 0;
+	while (split[i])
+		i++;
+	return (i);
+}
+
+int	check_and_assign(t_game *game, char **split, int splitsize)
+{
+	if (splitsize == 2)
+	{
+		
+	}
+	else if (splitsize == 1)
+		return (texture_parsing_error(split[0]));
+	else
+		printf("%s %s\n", ERROR, INVALID_FORMAT);
+	return (1);
+}
+
+static int	parse_textures(t_game *game, t_list **list)
+{
+	int		i;
+	char	**split;
+
+	i = 0;
+	while (i < 6)
+	{
+		split = ft_split((*list)->content, ' ');
+		if (!split)
+		{
+			printf("%s %s\n", ERROR, READING_FILE);
+			return (1);
+		}
+		check_and_assign(game, split, split_size(split));
+		i++;
+		free_split(split);
+		*list = (*list)->next;
+	}
+	return (0);
+}
 
 int	parse_map(t_game *game, t_list *list)
 {
@@ -70,11 +145,8 @@ static int	parse_file(t_game *game, char *mapname)
 	}
 	tmp = head;
 	if (parse_textures(game, &tmp))
-	{
-		printf("%s %s\n", ERROR, MISS_N_TEXTURE);
 		return (0);
-	}
-	if (parse_map(game, tmp))
+	if (parse_map(game, &tmp))
 	{
 		printf("%s %s\n", ERROR, INVALID_MAP);
 		return (0);
@@ -99,6 +171,6 @@ int	read_map(t_game *game, char *mapname)
 			printf("%s %s\n", ERROR, FNF);
 	}
 	else
-		printf("%s %s\n", ERROR, INVALID_EXT);
+		printf("%s %s\n", ERROR, INVALID_FORMAT);
 	return (0);
 }
