@@ -6,7 +6,7 @@
 /*   By: rbony <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/09 15:34:36 by rbony             #+#    #+#             */
-/*   Updated: 2022/08/11 10:40:26 by rbony            ###   ########lyon.fr   */
+/*   Updated: 2022/08/11 12:19:23 by rbony            ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,5 +49,8 @@ typedef struct s_game
 
 // read_map
 int			read_map(t_game *game, char *mapname);
+
+//check_map
+int			check_ext(char *str);
 
 #endif

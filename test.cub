@@ -1,5 +1,13 @@
-11111
-10001
-10101
-10001
-11111
+WE  w_texture
+EA  e_texture
+SO  s_texture
+NO  n_texture
+
+C   c_color
+F   f_color
+
+    11111
+    10001
+    10101
+    10001
+    11111

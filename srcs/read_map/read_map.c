@@ -3,48 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   read_map.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: alakhdar <<marvin@42.fr>>                  +#+  +:+       +#+        */
+/*   By: rbony <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/10 17:08:31 by rbony             #+#    #+#             */
-/*   Updated: 2022/08/11 12:04:14 by alakhdar         ###   ########lyon.fr   */
+/*   Updated: 2022/08/11 12:30:48 by rbony            ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../headers/cub3d.h"
-
-static int	check_ext(char *str)
-{
-	char	*tmp;
-
-	tmp = ft_strstr(str, ".cub");
-	if (!tmp)
-		return (0);
-	if (ft_strcmp(tmp, ".cub"))
-		return (0);
-	return (1);
-}
-
-/*static int	get_height(char *file)
-{
-	int		fd;
-	char	*line;
-	int		height;
-
-	height = 0;
-	fd = open(file, O_RDONLY);
-	if (fd < 0)
-		return (0);
-	line = get_next_line(fd);
-	while (line)
-	{
-		height++;
-		free(line);
-		line = get_next_line(fd);
-	}
-	free(line);
-	close (fd);
-	return (height);
-}*/
 
 static t_list	*fill_map_list(char *mapname)
 {
@@ -73,17 +39,37 @@ static t_list	*fill_map_list(char *mapname)
 	return (head);
 }
 
-static int	parse_map(/*t_game *game, */char *mapname)
+static int	parse_textures(t_game *game, t_list **list)
+{
+	
+}
+
+static int	parse_map(t_game *game, t_list **list)
+{
+	
+}
+
+static int	parse_file(t_game *game, char *mapname)
 {
 	t_list	*head;
 	t_list	*tmp;
 
 	head = fill_map_list(mapname);
-	tmp = head;
-	while (tmp)
+	if (!head)
 	{
-		printf("%s", tmp->content);
-		tmp = tmp->next;
+		printf("%s %s\n", ERROR, READING_FILE);
+		return (0);
+	}
+	tmp = head;
+	if (parse_textures(game, &tmp))
+	{
+		printf("%s %s\n", ERROR, MISS_N_TEXTURE);
+		return (0);
+	}
+	if (parse_map(game, &tmp))
+	{
+		printf("%s %s\n", ERROR, INVALID_MAP);
+		return (0);
 	}
 	ft_lstclear(&head);
 	return (1);
@@ -96,15 +82,15 @@ int	read_map(t_game *game, char *mapname)
 
 	file_exists = access(mapname, R_OK);
 	if (game && check_ext(mapname) && file_exists == 0)
-		return (parse_map(/*game, */mapname));
+		return (parse_file(game, mapname));
 	if (file_exists == -1)
 	{
 		if (access(mapname, F_OK) == 0)
-			printf(PD);
+			printf("%s %s\n", ERROR, PD);
 		else
-			printf(FNF);
+			printf("%s %s\n", ERROR, FNF);
 	}
 	else
-		printf(INVALID_EXT);
+		printf("%s %s\n", ERROR, INVALID_EXT);
 	return (0);
 }
