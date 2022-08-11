@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cub3d.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rbony <marvin@42.fr>                       +#+  +:+       +#+        */
+/*   By: alakhdar <<marvin@42.fr>>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/09 15:34:36 by rbony             #+#    #+#             */
-/*   Updated: 2022/08/11 12:19:23 by rbony            ###   ########lyon.fr   */
+/*   Updated: 2022/08/11 15:12:35 by alakhdar         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,6 +45,8 @@ typedef struct s_game
 	void				*win;
 	struct s_texture	textures;
 	int					**map;
+	int					width;
+	int					height;
 }				t_game;
 
 // read_map
@@ -52,5 +54,7 @@ int			read_map(t_game *game, char *mapname);
 
 //check_map
 int			check_ext(char *str);
+int			check_closed_height(char *str);
+int			check_closed_width(char *str);
 
 #endif

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   read_map.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rbony <marvin@42.fr>                       +#+  +:+       +#+        */
+/*   By: alakhdar <<marvin@42.fr>>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/10 17:08:31 by rbony             #+#    #+#             */
-/*   Updated: 2022/08/11 12:30:48 by rbony            ###   ########lyon.fr   */
+/*   Updated: 2022/08/11 15:32:46 by alakhdar         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,14 +39,22 @@ static t_list	*fill_map_list(char *mapname)
 	return (head);
 }
 
-static int	parse_textures(t_game *game, t_list **list)
+/*static int	parse_textures(t_game *game, t_list **list)
 {
 	
-}
+}*/
 
-static int	parse_map(t_game *game, t_list **list)
+int	parse_map(t_game *game, t_list *list)
 {
-	
+	int	i;
+
+	i = 0;
+	if (!check_map_layout(list))
+	{
+		printf("%s %s\n", ERROR, INVALID_MAP);
+		return (0);
+	}
+	return (create_int_map(game, list));
 }
 
 static int	parse_file(t_game *game, char *mapname)
@@ -66,7 +74,7 @@ static int	parse_file(t_game *game, char *mapname)
 		printf("%s %s\n", ERROR, MISS_N_TEXTURE);
 		return (0);
 	}
-	if (parse_map(game, &tmp))
+	if (parse_map(game, tmp))
 	{
 		printf("%s %s\n", ERROR, INVALID_MAP);
 		return (0);
