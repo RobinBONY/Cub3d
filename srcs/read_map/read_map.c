@@ -6,7 +6,7 @@
 /*   By: rbony <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/10 17:08:31 by rbony             #+#    #+#             */
-/*   Updated: 2022/08/10 17:31:47 by rbony            ###   ########lyon.fr   */
+/*   Updated: 2022/08/11 10:50:12 by rbony            ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,7 @@ static int	check_ext(char *str)
 
 static int	parse_map(t_game *game, char *mapname)
 {
-	
+	return (1);
 }
 
 // reads the map and fill the game attributes

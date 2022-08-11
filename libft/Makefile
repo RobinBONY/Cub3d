@@ -6,7 +6,7 @@
 #    By: rbony <marvin@42.fr>                       +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/11/03 09:27:22 by rbony             #+#    #+#              #
-#    Updated: 2022/08/10 13:26:17 by rbony            ###   ########lyon.fr    #
+#    Updated: 2022/08/11 10:57:58 by rbony            ###   ########lyon.fr    #
 #                                                                              #
 # **************************************************************************** #
 
@@ -52,10 +52,7 @@ SRCS = ft_calloc.c 		\
 		ft_lstsize.c 		\
 		ft_lstlast.c 		\
 		ft_lstadd_back.c 	\
-		ft_lstdelone.c 		\
 		ft_lstclear.c 		\
-		ft_lstiter.c 		\
-		ft_lstmap.c			\
 		get_next_line.c		\
 		get_next_line_utils.c
 
