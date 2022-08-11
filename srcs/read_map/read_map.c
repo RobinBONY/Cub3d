@@ -6,7 +6,7 @@
 /*   By: alakhdar <<marvin@42.fr>>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/10 17:08:31 by rbony             #+#    #+#             */
-/*   Updated: 2022/08/11 16:18:05 by alakhdar         ###   ########lyon.fr   */
+/*   Updated: 2022/08/11 16:28:39 by alakhdar         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,7 @@ static t_list	*fill_map_list(char *mapname)
 	return (head);
 }
 
-char	*find_keyword(char *line)
+/*char	*find_keyword(char *line)
 {
 	char						*keyword;
 
@@ -111,20 +111,20 @@ static int	parse_textures(t_game *game, t_list **list)
 			printf("%s %s\n", ERROR, READING_FILE);
 			return (1);
 		}
-		check_and_assign(game, split, split_size(split));
+		//check_and_assign(game, split, split_size(split));
 		i++;
 		free_split(split);
 		*list = (*list)->next;
 	}
 	return (0);
-}
+}*/
 
 int	parse_map(t_game *game, t_list *list)
 {
 	int	i;
 
 	i = 0;
-	if (!check_map_layout(list))
+	if (!check_map_layout(list, game))
 	{
 		printf("%s %s\n", ERROR, INVALID_MAP);
 		return (0);
@@ -144,9 +144,9 @@ static int	parse_file(t_game *game, char *mapname)
 		return (0);
 	}
 	tmp = head;
-	if (parse_textures(game, &tmp))
-		return (0);
-	if (parse_map(game, &tmp))
+	//if (parse_textures(game, &tmp))
+		//return (0);
+	if (parse_map(game, tmp))
 	{
 		printf("%s %s\n", ERROR, INVALID_MAP);
 		return (0);
@@ -172,5 +172,6 @@ int	read_map(t_game *game, char *mapname)
 	}
 	else
 		printf("%s %s\n", ERROR, INVALID_FORMAT);
+	print_int_tab(game->map);
 	return (0);
 }

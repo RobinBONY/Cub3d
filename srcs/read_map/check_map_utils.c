@@ -6,11 +6,11 @@
 /*   By: alakhdar <<marvin@42.fr>>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/11 12:44:43 by alakhdar          #+#    #+#             */
-/*   Updated: 2022/08/11 16:14:37 by alakhdar         ###   ########lyon.fr   */
+/*   Updated: 2022/08/11 16:30:14 by alakhdar         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes/cub3d.h"
+#include "../../headers/cub3d.h"
 
 static int	ft_isspace(int c)
 {
@@ -21,6 +21,26 @@ static int	ft_isspace(int c)
 		return (1);
 	}
 	return (0);
+}
+
+/*Debug function*/
+
+void	print_int_tab(int **map)
+{
+	int	i;
+	int	j;
+
+	i = 0;
+	while (map[i])
+	{
+		j = 0;
+		while (map[i][j])
+		{
+			printf("%d\n", map[i][j]);
+			j++;
+		}
+		i++;
+	}
 }
 
 void	fill_int_map(t_game *game, t_list *list)

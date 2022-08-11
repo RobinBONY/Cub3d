@@ -6,7 +6,7 @@
 /*   By: alakhdar <<marvin@42.fr>>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/09 15:34:36 by rbony             #+#    #+#             */
-/*   Updated: 2022/08/11 16:17:38 by alakhdar         ###   ########lyon.fr   */
+/*   Updated: 2022/08/11 16:24:29 by alakhdar         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,5 +56,11 @@ int			read_map(t_game *game, char *mapname);
 int			check_ext(char *str);
 int			check_closed_height(char *str);
 int			check_closed_width(char *str);
+int			create_int_map(t_game *game, t_list *list);
+int			check_map_layout(t_list *head, t_game *game);
+void		print_int_tab(int **map);
+void		fill_int_map(t_game *game, t_list *list);
+int			check_closed_width(char *str);
+int			check_closed_sides(char *str);
 
 #endif

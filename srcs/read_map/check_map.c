@@ -6,7 +6,7 @@
 /*   By: alakhdar <<marvin@42.fr>>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/11 10:52:28 by alakhdar          #+#    #+#             */
-/*   Updated: 2022/08/11 16:15:34 by alakhdar         ###   ########lyon.fr   */
+/*   Updated: 2022/08/11 16:29:31 by alakhdar         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,6 @@ int	check_ext(char *str)
 
 int	create_int_map(t_game *game, t_list *list)
 {
-	t_list	*tmp;
 	int		i;
 
 	i = 0;
@@ -41,6 +40,7 @@ int	create_int_map(t_game *game, t_list *list)
 		i++;
 	}
 	fill_int_map(game, list);
+	return (1);
 }
 
 int	check_map_layout(t_list *head, t_game *game)
@@ -62,7 +62,7 @@ int	check_map_layout(t_list *head, t_game *game)
 		if (check_closed_sides(tmp->content) != 1)
 			return (0);
 		tmp = tmp->next;
-		game_height++;
+		game->height++;
 	}
 	tmp_len = ft_strlen(tmp->content);
 	if (tmp_len > max_len)

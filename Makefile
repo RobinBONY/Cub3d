@@ -3,17 +3,19 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: rbony <marvin@42.fr>                       +#+  +:+       +#+         #
+#    By: alakhdar <<marvin@42.fr>>                  +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/01/28 08:34:54 by rbony             #+#    #+#              #
-#    Updated: 2022/08/10 17:18:04 by rbony            ###   ########lyon.fr    #
+#    Updated: 2022/08/11 16:25:44 by alakhdar         ###   ########lyon.fr    #
 #                                                                              #
 # **************************************************************************** #
 
 NAME = cub3d
 
 SRCS = 	srcs/main.c	\
-		srcs/read_map/read_map.c
+		srcs/read_map/read_map.c	\
+		srcs/read_map/check_map.c	\
+		srcs/read_map/check_map_utils.c
 
 OBJS = ${SRCS:.c=.o}
 
