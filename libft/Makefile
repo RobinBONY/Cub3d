@@ -6,7 +6,7 @@
 #    By: rbony <marvin@42.fr>                       +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/11/03 09:27:22 by rbony             #+#    #+#              #
-#    Updated: 2022/08/11 10:57:58 by rbony            ###   ########lyon.fr    #
+#    Updated: 2022/08/11 11:55:42 by rbony            ###   ########lyon.fr    #
 #                                                                              #
 # **************************************************************************** #
 
@@ -45,6 +45,7 @@ SRCS = ft_calloc.c 		\
 		ft_split.c 		\
 		ft_strdup.c 	\
 		ft_strlcpy.c 	\
+		ft_strstr.c 	\
 		ft_strnstr.c 	\
 		ft_tolower.c 	\
 		ft_lstnew.c 	\
