@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   read_map.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rbony <marvin@42.fr>                       +#+  +:+       +#+        */
+/*   By: alakhdar <<marvin@42.fr>>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/10 17:08:31 by rbony             #+#    #+#             */
-/*   Updated: 2022/08/11 10:50:12 by rbony            ###   ########lyon.fr   */
+/*   Updated: 2022/08/11 12:04:14 by alakhdar         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,12 +15,11 @@
 static int	check_ext(char *str)
 {
 	char	*tmp;
-	int		length;
 
-	length = ft_strlen(str);
-	if (length <= 4 || str[length - 5] == '/')
+	tmp = ft_strstr(str, ".cub");
+	if (!tmp)
 		return (0);
-	if (ft_strncmp(str + length - 4, ".cub", 4))
+	if (ft_strcmp(tmp, ".cub"))
 		return (0);
 	return (1);
 }
@@ -47,8 +46,46 @@ static int	check_ext(char *str)
 	return (height);
 }*/
 
-static int	parse_map(t_game *game, char *mapname)
+static t_list	*fill_map_list(char *mapname)
 {
+	int		fd;
+	char	*buffer;
+	t_list	*tmp;
+	t_list	*head;
+
+	head = NULL;
+	fd = open(mapname, O_RDONLY);
+	if (fd < 0)
+		return (NULL);
+	buffer = get_next_line(fd);
+	while (buffer)
+	{
+		tmp = ft_lstnew(buffer);
+		if (!tmp)
+		{
+			ft_lstclear(&head);
+			return (NULL);
+		}
+		ft_lstadd_back(&head, tmp);
+		buffer = get_next_line(fd);
+	}
+	close(fd);
+	return (head);
+}
+
+static int	parse_map(/*t_game *game, */char *mapname)
+{
+	t_list	*head;
+	t_list	*tmp;
+
+	head = fill_map_list(mapname);
+	tmp = head;
+	while (tmp)
+	{
+		printf("%s", tmp->content);
+		tmp = tmp->next;
+	}
+	ft_lstclear(&head);
 	return (1);
 }
 
@@ -58,8 +95,8 @@ int	read_map(t_game *game, char *mapname)
 	int	file_exists;
 
 	file_exists = access(mapname, R_OK);
-	if (game && check_ext(mapname) == 0 && file_exists == 0)
-		return (parse_map(game, mapname));
+	if (game && check_ext(mapname) && file_exists == 0)
+		return (parse_map(/*game, */mapname));
 	if (file_exists == -1)
 	{
 		if (access(mapname, F_OK) == 0)
