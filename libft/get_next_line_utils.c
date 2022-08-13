@@ -6,7 +6,7 @@
 /*   By: rbony <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/15 14:36:29 by rbony             #+#    #+#             */
-/*   Updated: 2022/08/10 08:19:54 by rbony            ###   ########lyon.fr   */
+/*   Updated: 2022/08/13 14:41:45 by rbony            ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,6 +67,7 @@ char	*gnl_ft_strncat(char *dest, char *src, int nb)
 		i++;
 	}
 	dest[i + next] = '\0';
+	i = 0;
 	return (dest);
 }
 

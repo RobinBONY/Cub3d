@@ -6,7 +6,7 @@
 /*   By: rbony <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/10 10:55:14 by rbony             #+#    #+#             */
-/*   Updated: 2022/08/11 15:40:55 by rbony            ###   ########lyon.fr   */
+/*   Updated: 2022/08/13 09:06:24 by rbony            ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,9 @@
 
 # define MISS_F_COLOR    "Missing Ground color"
 # define MISS_C_COLOR    "Missing Ceiling color"
+
+# define TEXTURE_NF     "Texture not found"
+# define COLOR_INVALID  "Invalid color"
 
 # define INVALID_MAP    "Map description invalid"
 

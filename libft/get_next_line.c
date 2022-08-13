@@ -6,7 +6,7 @@
 /*   By: rbony <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/15 14:36:27 by rbony             #+#    #+#             */
-/*   Updated: 2022/08/10 08:20:08 by rbony            ###   ########lyon.fr   */
+/*   Updated: 2022/08/13 14:42:38 by rbony            ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,7 +81,9 @@ char	*get_next_line(int fd)
 {
 	static char	buffer[BUFFER_SIZE + 1];
 	char		*line;
+	char		*tmp;
 
+	tmp = NULL;
 	buffer[BUFFER_SIZE] = '\0';
 	if (fd < 0 || BUFFER_SIZE < 1)
 		return (NULL);
@@ -94,5 +96,8 @@ char	*get_next_line(int fd)
 		free(line);
 		return (NULL);
 	}
+	tmp = ft_strchr(line, '\n');
+	if (tmp)
+		tmp[ft_strlen(tmp) - 1] = '\0';
 	return (line);
 }

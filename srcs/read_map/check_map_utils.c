@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   check_map_utils.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: alakhdar <<marvin@42.fr>>                  +#+  +:+       +#+        */
+/*   By: rbony <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/11 12:44:43 by alakhdar          #+#    #+#             */
-/*   Updated: 2022/08/11 16:30:14 by alakhdar         ###   ########lyon.fr   */
+/*   Updated: 2022/08/13 16:50:35 by rbony            ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,22 +23,29 @@ static int	ft_isspace(int c)
 	return (0);
 }
 
-/*Debug function*/
+/*Debug functions*/
 
-void	print_int_tab(int **map)
+void	print_data(t_game *game)
 {
 	int	i;
 	int	j;
 
+	printf("n texture : %d\n", game->textures.n_texture);
+	printf("s texture : %d\n", game->textures.s_texture);
+	printf("e texture : %d\n", game->textures.e_texture);
+	printf("w texture : %d\n", game->textures.w_texture);
+	printf("f color : %d,%d,%d\n", game->textures.f_color.r, game->textures.f_color.g, game->textures.f_color.b);
+	printf("c color : %d,%d,%d\n", game->textures.c_color.r, game->textures.c_color.g, game->textures.c_color.b);
 	i = 0;
-	while (map[i])
+	while (i < game->height)
 	{
 		j = 0;
-		while (map[i][j])
+		while (j < game->width)
 		{
-			printf("%d\n", map[i][j]);
+			printf("%d\t", game->map[i][j]);
 			j++;
 		}
+		printf("%c", '\n');
 		i++;
 	}
 }
@@ -54,9 +61,12 @@ void	fill_int_map(t_game *game, t_list *list)
 	while (h < game->height)
 	{
 		i = 0;
-		while (i < width)
+		while (i < game->width)
 		{
-			tmp->map[h][i] = ft_atoi(tmp->content[i]);
+			if (i < (int)ft_strlen(tmp->content) && tmp->content[i] - '0' >= 0)
+				game->map[h][i] = tmp->content[i] - '0';
+			else
+				game->map[h][i] = -1;
 			i++;
 		}
 		h++;
@@ -71,11 +81,11 @@ int	check_closed_width(char *str)
 	i = 0;
 	while (str[i])
 	{
-		if (str[i] != "1")
-			return (0);
+		if (str[i] != '1' && str[i] != ' ')
+			return (1);
 		i++;
 	}
-	return (1);
+	return (0);
 }
 
 int	check_closed_sides(char *str)
@@ -85,11 +95,11 @@ int	check_closed_sides(char *str)
 	i = 0;
 	while (str[i] && str[i + 1])
 	{
-		if (!ft_isspace(str[i]) && str[i + 1] == "0")
-			return (0);
-		if (str[i] == "0" && !ft_isspace(str[i + 1]))
-			return (0);
+		if (ft_isspace(str[i]) && str[i + 1] == '0')
+			return (1);
+		if (str[i] == '0' && ft_isspace(str[i + 1]))
+			return (1);
 		i++;
 	}
-	return (1);
+	return (0);
 }

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cub3d.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: alakhdar <<marvin@42.fr>>                  +#+  +:+       +#+        */
+/*   By: rbony <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/09 15:34:36 by rbony             #+#    #+#             */
-/*   Updated: 2022/08/11 16:24:29 by alakhdar         ###   ########lyon.fr   */
+/*   Updated: 2022/08/13 16:33:17 by rbony            ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,10 +31,10 @@ typedef struct s_color
 
 typedef struct s_texture
 {
-	char				*n_texture;
-	char				*s_texture;
-	char				*e_texture;
-	char				*w_texture;
+	int					n_texture;
+	int					s_texture;
+	int					e_texture;
+	int					w_texture;
 	struct s_color		f_color;
 	struct s_color		c_color;
 }				t_texture;
@@ -53,14 +53,19 @@ typedef struct s_game
 int			read_map(t_game *game, char *mapname);
 
 //check_map
-int			check_ext(char *str);
+int			check_ext(char *str, char *ext);
 int			check_closed_height(char *str);
 int			check_closed_width(char *str);
 int			create_int_map(t_game *game, t_list *list);
 int			check_map_layout(t_list *head, t_game *game);
-void		print_int_tab(int **map);
+void		print_data(t_game *game);
 void		fill_int_map(t_game *game, t_list *list);
 int			check_closed_width(char *str);
 int			check_closed_sides(char *str);
+
+int			error_1(char *str);
+int			error_2(char *str1, char *str2);
+int			parse_textures(t_game *game, t_list **list);
+int			split_size(char **split);
 
 #endif
