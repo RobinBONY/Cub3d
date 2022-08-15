@@ -6,7 +6,7 @@
 /*   By: rbony <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/11 10:52:28 by alakhdar          #+#    #+#             */
-/*   Updated: 2022/08/13 16:46:35 by rbony            ###   ########lyon.fr   */
+/*   Updated: 2022/08/15 13:22:10 by rbony            ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,12 +29,12 @@ int	create_int_map(t_game *game, t_list *list)
 	int		i;
 
 	i = 0;
-	game->map = (int **)malloc(sizeof(int *) * game->height);
+	game->map = (int **)malloc(sizeof(int *) * game->map_height);
 	if (!game->map)
 		return (1);
-	while (i < game->height)
+	while (i < game->map_height)
 	{
-		game->map[i] = malloc(sizeof(int) * game->width);
+		game->map[i] = malloc(sizeof(int) * game->map_width);
 		if (!game->map[i])
 			return (1);
 		i++;
@@ -48,7 +48,7 @@ int	check_map_layout(t_list *head, t_game *game)
 	t_list	*tmp;
 	int		max_len;
 
-	game->height = 1;
+	game->map_height = 1;
 	tmp = head;
 	max_len = ft_strlen(tmp->content);
 	if (check_closed_width(tmp->content))
@@ -60,12 +60,12 @@ int	check_map_layout(t_list *head, t_game *game)
 		if (check_closed_sides(tmp->content))
 			return (1);
 		tmp = tmp->next;
-		game->height++;
+		game->map_height++;
 	}
 	if ((int)ft_strlen(tmp->content) > max_len)
 			max_len = ft_strlen(tmp->content);
 	if (check_closed_width(tmp->content))
 		return (1);
-	game->width = max_len;
+	game->map_width = max_len;
 	return (0);
 }
