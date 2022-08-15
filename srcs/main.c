@@ -6,7 +6,7 @@
 /*   By: rbony <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/09 15:38:45 by rbony             #+#    #+#             */
-/*   Updated: 2022/08/13 17:07:57 by rbony            ###   ########lyon.fr   */
+/*   Updated: 2022/08/15 09:49:19 by rbony            ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,6 @@ static int	close_window(t_game *game)
 	close(game->textures.e_texture);
 	close(game->textures.w_texture);
 	mlx_destroy_window(game->mlx, game->win);
-	free(game->mlx);
 	exit(0);
 	return (0);
 }
