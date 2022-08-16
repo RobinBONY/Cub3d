@@ -6,23 +6,18 @@
 /*   By: rbony <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/15 13:26:50 by rbony             #+#    #+#             */
-/*   Updated: 2022/08/15 18:21:18 by rbony            ###   ########lyon.fr   */
+/*   Updated: 2022/08/16 18:10:20 by rbony            ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../headers/cub3d.h"
 
-float	degtorad(int a)
-{
-	return (a * M_PI / 180.0);
-}
-
 int	fixang(int a)
 {
-	if (a > 359)
-		a -= 360;
+	if (a > (2 * M_PI))
+		a -= (2 * M_PI);
 	if (a < 0)
-		a += 360;
+		a += (2 * M_PI);
 	return (a);
 }
 
@@ -45,18 +40,34 @@ void	draw_line(t_game *game, int x, int y, int len)
 	int				tmpy;
 
 	width = 0;
-	while (width < 8)
+	while (width < 63)
 	{
 		i = 0.0;
 		while (i <= 1.0)
 		{
 			tmpx = x + (x - x) * i;
-			tmpy = y + (len - y) * i;
+			tmpy = y + ((y + len) - y) * i;
 			my_mlx_pixel_put(game, tmpx, tmpy, 0xFF0000);
-			i += 0.0001;
+			i += 0.001;
 		}
 		x++;
 		width++;
+	}
+}
+
+void	brest(t_game *env, int sx, int sy, int ex, int ey)
+{
+	float	i;
+	int		tmpx;
+	int		tmpy;
+
+	i = 0.0;
+	while (i <= 1.0)
+	{
+		tmpx = sx + (ex - sx) * i;
+		tmpy = sy + (ey - sy) * i;
+		my_mlx_pixel_put(env, tmpx, tmpy, 0x00FF00);
+		i += 0.0001;
 	}
 }
 
@@ -81,123 +92,167 @@ void	draw_background(t_game *game)
 	}
 }
 
-void	check_vertical(t_game *game, t_player p, int **map, t_raycasting *ra)
+int	in_map(t_game *game, int x, int y)
 {
-	float	tan;
-
-	ra->dof = 0;
-	tan = tanf(degtorad(ra->ra));
-	if (cos(degtorad(ra->ra)) > 0.001)
-	{
-		ra->rx = (((int)p.px >> 6) << 6) + 64;
-		ra->ry = (p.px - ra->rx) * tan + p.py;
-		ra->xo = 64;
-		ra->yo = -ra->xo * tan;
-	}
-	else if (cos(degtorad(ra->ra)) < -0.001)
-	{
-		ra->rx = (((int)p.px >> 6) << 6) - 0.0001;
-		ra->ry = (p.px - ra->rx) * tan + p.py;
-		ra->xo = -64;
-		ra->yo = -ra->xo * tan;
-	}
-	else
-	{
-		ra->rx = p.px;
-		ra->ry = p.py;
-		ra->dof = 8;
-	}
-	while (ra->dof < 8)
-	{
-		ra->mx = (int)(ra->rx) >> 6;
-		ra->my = (int)(ra->ry) >> 6;
-		if (ra->mp > 0 && ra->mp < game->map_width * game->map_height && map[ra->mx][ra->my] == 1)
-		{
-			ra->dof = 8;
-			ra->disv = cos(degtorad(ra->ra)) * (ra->rx - p.px) - sin(degtorad(ra->ra)) * (ra->ry - p.py);
-		}
-		else
-		{
-			ra->rx += ra->xo;
-			ra->ry += ra->yo;
-			ra->dof += 1;
-		}
-	}
-	ra->vx = ra->rx;
-	ra->vy = ra->ry;
+	if (x < game->map_width && y < game->map_height)
+		return (1);
+	return (0);
 }
 
-void	check_horizontal(t_game *game, t_player p, int **map, t_raycasting *ra)
+void	top_right(t_game *game, t_player p, t_raycasting *ray)
 {
-	float	tan;
-
-	ra->dof = 0;
-	tan = 1.0 / tanf(degtorad(ra->ra));
-	if (sin(degtorad(ra->ra)) > 0.001)
+	ray->dof = 0;
+	ray->cx = p.px;
+	ray->cy = p.py;
+	while (in_map(game, ray->cx / 64, ray->cy / 64)
+		&& game->map[ray->cy / 64][ray->cx / 64] != 1)
 	{
-		ra->ry = (((int)p.py >> 6) << 6) - 0.0001;
-		ra->rx = (p.py - ra->ry) * tan + p.px;
-		ra->yo = -64;
-		ra->xo = -ra->yo * tan;
-	}
-	else if (sin(degtorad(ra->ra)) < -0.001)
-	{
-		ra->ry = (((int)p.py >> 6) << 6) + 64;
-		ra->rx = (p.py - ra->ry) * tan + p.px;
-		ra->yo = 64;
-		ra->xo = -ra->yo * tan;
-	}
-	else
-	{
-		ra->rx = p.px;
-		ra->ry = p.py;
-		ra->dof = 8;
-	}
-	while (ra->dof < 8)
-	{
-		ra->mx = (int)(ra->rx) >> 6;
-		ra->my = (int)(ra->ry) >> 6;
-		if (ra->mp > 0 && ra->mp < game->map_width * game->map_height && map[ra->mx][ra->my] == 1)
+		ray->cx++;
+		ray->cy--;
+		ray->dx = 64 - (ray->cx % 64);
+		ray->dy = ray->cy % 64;
+		if (ray->ra == 0)
+			ray->cx += ray->dx;
+		else if (ray->dx < ray->dy)
 		{
-			ra->dof = 8;
-			ra->dish = cos(degtorad(ra->ra)) * (ra->rx - p.px) - sin(degtorad(ra->ra)) * (ra->ry - p.py);
+			ray->cx += ray->dx;
+			ray->cy -= ray->atan * ray->dx;
 		}
 		else
 		{
-			ra->rx += ra->xo;
-			ra->ry += ra->yo;
-			ra->dof += 1;
+			ray->cx += ray->atan * ray->dy;
+			ray->cy -= ray->dy;
 		}
 	}
 }
 
-void	draw(t_game *game)
+void	top_left(t_game *game, t_player p, t_raycasting *ray)
+{
+	ray->dof = 0;
+	ray->cx = p.px;
+	ray->cy = p.py;
+	while (in_map(game, ray->cx / 64, ray->cy / 64)
+		&& game->map[ray->cy / 64][ray->cx / 64] != 1)
+	{
+		ray->cx--;
+		ray->cy--;
+		ray->dx = ray->cx % 64;
+		ray->dy = ray->cy % 64;
+		if (ray->ra == M_PI / 2)
+			ray->cy -= ray->dy;
+		else if (ray->dx < ray->dy)
+		{
+			ray->cx -= ray->dx;
+			ray->cy -= ray->atan * ray->dx;
+		}
+		else
+		{
+			ray->cx -= ray->atan * ray->dy;
+			ray->cy -= ray->dy;
+		}
+	}
+}
+
+void	bot_left(t_game *game, t_player p, t_raycasting *ray)
+{
+	ray->dof = 0;
+	ray->cx = p.px;
+	ray->cy = p.py;
+	while (in_map(game, ray->cx / 64, ray->cy / 64)
+		&& game->map[ray->cy / 64][ray->cx / 64] != 1)
+	{
+		ray->cx--;
+		ray->cy++;
+		ray->dx = ray->cx % 64;
+		ray->dy = 64 - (ray->cy % 64);
+		if (ray->ra == M_PI)
+			ray->cx -= ray->dx;
+		else if (ray->dx < ray->dy)
+		{
+			ray->cx -= ray->dx;
+			ray->cy += ray->atan * ray->dx;
+		}
+		else
+		{
+			ray->cx -= ray->atan * ray->dy;
+			ray->cy += ray->dy;
+		}
+	}
+}
+
+void	bot_right(t_game *game, t_player p, t_raycasting *ray)
+{
+	ray->dof = 0;
+	ray->cx = p.px;
+	ray->cy = p.py;
+	while (in_map(game, ray->cx / 64, ray->cy / 64)
+		&& game->map[ray->cy / 64][ray->cx / 64] != 1)
+	{
+		ray->cx++;
+		ray->cy++;
+		ray->dx = 64 - (ray->cx % 64);
+		ray->dy = 64 - (ray->cy % 64);
+		if (ray->ra == (3 * (M_PI / 2)))
+			ray->cy += ray->dy;
+		else if (ray->dx < ray->dy)
+		{
+			ray->cx += ray->dx;
+			ray->cy += ray->atan * ray->dx;
+		}
+		else
+		{
+			ray->cx += ray->atan * ray->dy;
+			ray->cy += ray->dy;
+		}
+	}
+}
+
+void	raycasting(t_game *game)
 {
 	int				r;
 	t_raycasting	ray;
 
-	draw_background(game);
-	ray.ra = fixang(game->player.pa + 30);
-	ray.disv = 100000;
-	ray.dish = 100000;
+	ray.ra = game->player.pa;
 	r = 0;
-	while (r < 60)
+	while (r < 1)
 	{
-		check_vertical(game, game->player, game->map, &ray);
-		check_horizontal(game, game->player, game->map, &ray);
-		if (ray.disv < ray.dish)
-		{
-			ray.rx = ray.vx;
-			ray.ry = ray.vy;
-			ray.dish = ray.disv;
-		}
-		ray.ca = fixang(game->player.pa - ray.ra);
-		ray.dish = ray.dish * cos(degtorad(ray.ca));
-		ray.lineh = (64 * 320) / (ray.dish);
-		if (ray.lineh > 320)
-			ray.lineh = 320;
-		draw_line(game, r * 8, game->win_width - ray.lineh, ray.lineh);
-		ray.ra = fixang(ray.ra - 1);
+		printf("%f\n", ray.ra);
+		ray.atan = tanf(ray.ra);
+		if (ray.ra >= 0 && ray.ra < (M_PI / 2))
+			top_right(game, game->player, &ray);
+		if (ray.ra >= (M_PI / 2) && ray.ra < M_PI)
+			top_left(game, game->player, &ray);
+		if (ray.ra >= M_PI && ray.ra < (3 * (M_PI / 2)))
+			bot_left(game, game->player, &ray);
+		if (ray.ra >= (3 * (M_PI / 2)) && ray.ra < (2 * M_PI))
+			bot_right(game, game->player, &ray);
+		printf("%d %d\n", ray.cx, ray.cy);
+		brest(game, game->player.px, game->player.py, ray.cx, ray.cy);
 		r++;
+		ray.ra = fixang(game->player.pa - r);
+	}
+}
+
+void	draw_map(t_game *game)
+{
+	int	i;
+	int	j;
+	int	centerx;
+	int	centery;
+
+	draw_background(game);
+	centerx = game->map_width / 2;
+	centery = game->map_height / 2;
+	i = 0;
+	while (i < game->map_height)
+	{
+		j = 0;
+		while (j < game->map_width)
+		{
+			if (game->map[i][j] == 1)
+				draw_line(game, j * 64, i * 64, 63);
+			j++;
+		}
+		i++;
 	}
 }

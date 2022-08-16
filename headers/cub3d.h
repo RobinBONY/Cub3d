@@ -6,7 +6,7 @@
 /*   By: rbony <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/09 15:34:36 by rbony             #+#    #+#             */
-/*   Updated: 2022/08/15 17:56:39 by rbony            ###   ########lyon.fr   */
+/*   Updated: 2022/08/16 17:45:48 by rbony            ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,32 +25,22 @@
 
 typedef struct s_raycasting
 {
-	int		r;
-	int		mx;
-	int		my;
-	int		mp;
 	int		dof;
-	int		ca;
-	int		lineh;
-	int		lineoff;
-	float	vx;
-	float	vy;
-	float	rx;
-	float	ry;
-	float	ra;
-	float	xo;
-	float	yo;
-	float	disv;
-	float	dish;
+	double	atan;
+	double	dx;
+	double	dy;
+	int		cx;
+	int		cy;
+	double	ra;
 }				t_raycasting;
 
 typedef struct s_player
 {
-	int	px;
-	int	py;
-	int	pdx;
-	int	pdy;
-	int	pa;
+	int		px;
+	int		py;
+	int		pdx;
+	int		pdy;
+	double	pa;
 }				t_player;
 
 typedef struct s_data {
@@ -112,5 +102,8 @@ int			parse_textures(t_game *game, t_list **list);
 int			split_size(char **split);
 void		draw(t_game *game);
 void		draw_background(t_game *game);
+void		draw_map(t_game *game);
+int			fixang(int a);
+void		raycasting(t_game *game);
 
 #endif
