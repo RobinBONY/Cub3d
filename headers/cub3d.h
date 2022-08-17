@@ -6,7 +6,7 @@
 /*   By: rbony <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/09 15:34:36 by rbony             #+#    #+#             */
-/*   Updated: 2022/08/16 17:45:48 by rbony            ###   ########lyon.fr   */
+/*   Updated: 2022/08/17 14:18:52 by rbony            ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,25 +23,21 @@
 # include	"../libft/libft.h"
 # include	"errors.h"
 
+typedef struct s_point
+{
+	int	x;
+	int	y;
+}				t_point;
+
 typedef struct s_raycasting
 {
-	int		dof;
-	double	atan;
-	double	dx;
-	double	dy;
-	int		cx;
-	int		cy;
-	double	ra;
+	int				dx;
+	int				dy;
+	struct s_point	c;
+	struct s_point	cx;
+	struct s_point	cy;
+	double			ra;
 }				t_raycasting;
-
-typedef struct s_player
-{
-	int		px;
-	int		py;
-	int		pdx;
-	int		pdy;
-	double	pa;
-}				t_player;
 
 typedef struct s_data {
 	void	*img;
@@ -79,7 +75,8 @@ typedef struct s_game
 	int					**map;
 	int					map_width;
 	int					map_height;
-	struct s_player		player;
+	struct s_point		player;
+	double				pa;
 }				t_game;
 
 // read_map
@@ -103,7 +100,7 @@ int			split_size(char **split);
 void		draw(t_game *game);
 void		draw_background(t_game *game);
 void		draw_map(t_game *game);
-int			fixang(int a);
+double		fixang(double a);
 void		raycasting(t_game *game);
 
 #endif

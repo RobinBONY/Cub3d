@@ -6,18 +6,18 @@
 /*   By: rbony <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/15 13:26:50 by rbony             #+#    #+#             */
-/*   Updated: 2022/08/16 18:10:20 by rbony            ###   ########lyon.fr   */
+/*   Updated: 2022/08/17 17:47:33 by rbony            ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../headers/cub3d.h"
 
-int	fixang(int a)
+double	fixang(double a)
 {
-	if (a > (2 * M_PI))
-		a -= (2 * M_PI);
+	if (a >= ((double)2 * M_PI))
+		a -= ((double)2 * M_PI);
 	if (a < 0)
-		a += (2 * M_PI);
+		a += ((double)2 * M_PI);
 	return (a);
 }
 
@@ -35,23 +35,16 @@ void	my_mlx_pixel_put(t_game *game, int x, int y, int color)
 void	draw_line(t_game *game, int x, int y, int len)
 {
 	float			i;
-	int				width;
 	int				tmpx;
 	int				tmpy;
 
-	width = 0;
-	while (width < 63)
+	i = 0.0;
+	while (i <= 1.0)
 	{
-		i = 0.0;
-		while (i <= 1.0)
-		{
-			tmpx = x + (x - x) * i;
-			tmpy = y + ((y + len) - y) * i;
-			my_mlx_pixel_put(game, tmpx, tmpy, 0xFF0000);
-			i += 0.001;
-		}
-		x++;
-		width++;
+		tmpx = x + (x - x) * i;
+		tmpy = y + ((y + len) - y) * i;
+		my_mlx_pixel_put(game, tmpx, tmpy, 0xFF0000);
+		i += 0.001;
 	}
 }
 
@@ -92,144 +85,165 @@ void	draw_background(t_game *game)
 	}
 }
 
+void	nearest_point(t_raycasting *ray)
+{
+	int	dx;
+	int	dy;
+
+	dx = pow(ray->cx.x - ray->c.x, 2) + pow(ray->cx.y - ray->c.y, 2);
+	dy = pow(ray->cy.x - ray->c.x, 2) + pow(ray->cy.y - ray->c.y, 2);
+	if (dx < dy)
+		ray->c = ray->cx;
+	else
+		ray->c = ray->cy;
+}
+
 int	in_map(t_game *game, int x, int y)
 {
-	if (x < game->map_width && y < game->map_height)
+	if (x > 0 && y > 0 && x < game->map_width && y < game->map_height)
 		return (1);
 	return (0);
 }
 
-void	top_right(t_game *game, t_player p, t_raycasting *ray)
+double	top_right(t_game *game, t_raycasting *ray)
 {
-	ray->dof = 0;
-	ray->cx = p.px;
-	ray->cy = p.py;
-	while (in_map(game, ray->cx / 64, ray->cy / 64)
-		&& game->map[ray->cy / 64][ray->cx / 64] != 1)
+	ray->c = game->player;
+	while (in_map(game, ray->c.x / 64, (ray->c.y - 1) / 64)
+		&& game->map[(ray->c.y - 1) / 64][ray->c.x / 64] != 1)
 	{
-		ray->cx++;
-		ray->cy--;
-		ray->dx = 64 - (ray->cx % 64);
-		ray->dy = ray->cy % 64;
+		ray->cx = ray->c;
+		ray->cy = ray->c;
+		ray->dx = 64 - (ray->c.x % 64);
+		ray->dy = ray->c.y % 64;
+		if (ray->dx == 0)
+			ray->dx = 64;
+		if (ray->dy == 0)
+			ray->dy = 64;
 		if (ray->ra == 0)
-			ray->cx += ray->dx;
-		else if (ray->dx < ray->dy)
-		{
-			ray->cx += ray->dx;
-			ray->cy -= ray->atan * ray->dx;
-		}
+			ray->c.x += ray->dx;
 		else
 		{
-			ray->cx += ray->atan * ray->dy;
-			ray->cy -= ray->dy;
+			ray->cx.x += ray->dx;
+			ray->cx.y -= tan(ray->ra) * ray->dx;
+			ray->cy.x += tan(M_PI / 2 - ray->ra) * ray->dy;
+			ray->cy.y -= ray->dy;
 		}
+		nearest_point(ray);
 	}
+	return (sqrt(pow(game->player.x - ray->c.x, 2)
+			+ pow(game->player.y - ray->c.y, 2)));
 }
 
-void	top_left(t_game *game, t_player p, t_raycasting *ray)
+double	top_left(t_game *game, t_raycasting *ray)
 {
-	ray->dof = 0;
-	ray->cx = p.px;
-	ray->cy = p.py;
-	while (in_map(game, ray->cx / 64, ray->cy / 64)
-		&& game->map[ray->cy / 64][ray->cx / 64] != 1)
+	ray->c = game->player;
+	while (in_map(game, (ray->c.x - 1) / 64, (ray->c.y - 1) / 64)
+		&& game->map[(ray->c.y - 1) / 64][(ray->c.x - 1) / 64] != 1)
 	{
-		ray->cx--;
-		ray->cy--;
-		ray->dx = ray->cx % 64;
-		ray->dy = ray->cy % 64;
+		ray->cx = ray->c;
+		ray->cy = ray->c;
+		ray->dx = ray->c.x % 64;
+		ray->dy = ray->c.y % 64;
+		if (ray->dx == 0)
+			ray->dx = 64;
+		if (ray->dy == 0)
+			ray->dy = 64;
 		if (ray->ra == M_PI / 2)
-			ray->cy -= ray->dy;
-		else if (ray->dx < ray->dy)
-		{
-			ray->cx -= ray->dx;
-			ray->cy -= ray->atan * ray->dx;
-		}
+			ray->c.y -= ray->dy;
 		else
 		{
-			ray->cx -= ray->atan * ray->dy;
-			ray->cy -= ray->dy;
+			ray->cx.x -= ray->dx;
+			ray->cx.y -= tan(M_PI / 2 - (ray->ra - (M_PI / 2))) * ray->dx;
+			ray->cy.x -= tan(ray->ra - (M_PI / 2)) * ray->dy;
+			ray->cy.y -= ray->dy;
 		}
+		nearest_point(ray);
 	}
+	return (sqrt(pow(game->player.x - ray->c.x, 2)
+			+ pow(game->player.y - ray->c.y, 2)));
 }
 
-void	bot_left(t_game *game, t_player p, t_raycasting *ray)
+double	bot_left(t_game *game, t_raycasting *ray)
 {
-	ray->dof = 0;
-	ray->cx = p.px;
-	ray->cy = p.py;
-	while (in_map(game, ray->cx / 64, ray->cy / 64)
-		&& game->map[ray->cy / 64][ray->cx / 64] != 1)
+	ray->c = game->player;
+	while (in_map(game, (ray->c.x - 1) / 64, ray->c.y / 64)
+		&& game->map[ray->c.y / 64][(ray->c.x - 1) / 64] != 1)
 	{
-		ray->cx--;
-		ray->cy++;
-		ray->dx = ray->cx % 64;
-		ray->dy = 64 - (ray->cy % 64);
+		ray->cx = ray->c;
+		ray->cy = ray->c;
+		ray->dx = ray->c.x % 64;
+		ray->dy = 64 - (ray->c.y % 64);
+		if (ray->dx == 0)
+			ray->dx = 64;
+		if (ray->dy == 0)
+			ray->dy = 64;
 		if (ray->ra == M_PI)
-			ray->cx -= ray->dx;
-		else if (ray->dx < ray->dy)
-		{
-			ray->cx -= ray->dx;
-			ray->cy += ray->atan * ray->dx;
-		}
+			ray->c.x -= ray->dx;
 		else
 		{
-			ray->cx -= ray->atan * ray->dy;
-			ray->cy += ray->dy;
+			ray->cx.x -= ray->dx;
+			ray->cx.y += tan(ray->ra - M_PI) * ray->dx;
+			ray->cy.x -= tan(M_PI / 2 - (ray->ra - M_PI)) * ray->dy;
+			ray->cy.y += ray->dy;
 		}
+		nearest_point(ray);
 	}
+	return (sqrt(pow(game->player.x - ray->c.x, 2)
+			+ pow(game->player.y - ray->c.y, 2)));
 }
 
-void	bot_right(t_game *game, t_player p, t_raycasting *ray)
+double	bot_right(t_game *game, t_raycasting *ray)
 {
-	ray->dof = 0;
-	ray->cx = p.px;
-	ray->cy = p.py;
-	while (in_map(game, ray->cx / 64, ray->cy / 64)
-		&& game->map[ray->cy / 64][ray->cx / 64] != 1)
+	ray->c = game->player;
+	while (in_map(game, ray->c.x / 64, ray->c.y / 64)
+		&& game->map[ray->c.y / 64][ray->c.x / 64] != 1)
 	{
-		ray->cx++;
-		ray->cy++;
-		ray->dx = 64 - (ray->cx % 64);
-		ray->dy = 64 - (ray->cy % 64);
+		ray->cx = ray->c;
+		ray->cy = ray->c;
+		ray->dx = 64 - (ray->c.x % 64);
+		ray->dy = 64 - (ray->c.y % 64);
+		if (ray->dx == 0)
+			ray->dx = 64;
+		if (ray->dy == 0)
+			ray->dy = 64;
 		if (ray->ra == (3 * (M_PI / 2)))
-			ray->cy += ray->dy;
-		else if (ray->dx < ray->dy)
-		{
-			ray->cx += ray->dx;
-			ray->cy += ray->atan * ray->dx;
-		}
+			ray->c.y += ray->dy;
 		else
 		{
-			ray->cx += ray->atan * ray->dy;
-			ray->cy += ray->dy;
+			ray->cx.x += ray->dx;
+			ray->cx.y += tan(M_PI / 2 - (ray->ra - (3 * (M_PI / 2)))) * ray->dx;
+			ray->cy.x += tan(ray->ra - (3 * (M_PI / 2))) * ray->dy;
+			ray->cy.y += ray->dy;
 		}
+		nearest_point(ray);
 	}
+	return (sqrt(pow(game->player.x - ray->c.x, 2)
+			+ pow(game->player.y - ray->c.y, 2)));
 }
 
 void	raycasting(t_game *game)
 {
 	int				r;
+	double			dist;
 	t_raycasting	ray;
 
-	ray.ra = game->player.pa;
+	draw_background(game);
+	ray.ra = game->pa + (M_PI / 3) / 2;
 	r = 0;
-	while (r < 1)
+	while (r < game->win_width)
 	{
-		printf("%f\n", ray.ra);
-		ray.atan = tanf(ray.ra);
 		if (ray.ra >= 0 && ray.ra < (M_PI / 2))
-			top_right(game, game->player, &ray);
+			dist = top_right(game, &ray);
 		if (ray.ra >= (M_PI / 2) && ray.ra < M_PI)
-			top_left(game, game->player, &ray);
+			dist = top_left(game, &ray);
 		if (ray.ra >= M_PI && ray.ra < (3 * (M_PI / 2)))
-			bot_left(game, game->player, &ray);
+			dist = bot_left(game, &ray);
 		if (ray.ra >= (3 * (M_PI / 2)) && ray.ra < (2 * M_PI))
-			bot_right(game, game->player, &ray);
-		printf("%d %d\n", ray.cx, ray.cy);
-		brest(game, game->player.px, game->player.py, ray.cx, ray.cy);
+			dist = bot_right(game, &ray);
+		//brest(game, game->player.x, game->player.y, ray.c.x, ray.c.y);
+		draw_line(game, r, game->win_height / 2, dist);
 		r++;
-		ray.ra = fixang(game->player.pa - r);
+		ray.ra = fixang(ray.ra + (M_PI / 3) / (game->win_width));
 	}
 }
 

@@ -6,7 +6,7 @@
 /*   By: rbony <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/09 15:38:45 by rbony             #+#    #+#             */
-/*   Updated: 2022/08/16 18:05:57 by rbony            ###   ########lyon.fr   */
+/*   Updated: 2022/08/17 17:45:48 by rbony            ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,18 +37,22 @@ int	manage_events(int keycode, t_game *game)
 	if (keycode == 65307 || keycode == 53)
 		close_window(game);
 	if (keycode == 13)
-		game->player.py -= 10;
+		game->player.y -= 10;
 	if (keycode == 1)
-		game->player.py += 10;
+		game->player.y += 10;
 	if (keycode == 0)
-		game->player.px -= 10;
+		game->player.x -= 10;
 	if (keycode == 2)
-		game->player.px += 10;
+		game->player.x += 10;
 	if (keycode == 124)
-		game->player.pa = fixang(game->player.pa + 0.001);
+	{
+		game->pa = fixang(game->pa - M_PI / 25);
+	}
 	if (keycode == 123)
-		game->player.pa = fixang(game->player.pa - 0.001);
-	draw_map(game);
+	{
+		game->pa = fixang(game->pa + M_PI / 25);
+	}
+	//draw_map(game);
 	raycasting(game);
 	mlx_put_image_to_window(game->mlx, game->win, game->img.img, 0, 0);
 	return (0);
@@ -58,9 +62,9 @@ void	init(t_game *game)
 {
 	game->win_width = 1920;
 	game->win_height = 1080;
-	game->player.px = 7 * 64 + 30;
-	game->player.py = 3 * 64 + 32;
-	game->player.pa = M_PI;
+	game->player.x = 7 * 64 + 32;
+	game->player.y = 3 * 64 + 32;
+	game->pa = M_PI / 4;
 }
 
 int	main(int argc, char **argv)
@@ -77,7 +81,7 @@ int	main(int argc, char **argv)
 		game.img.addr = mlx_get_data_addr(game.img.img,
 				&game.img.bits_per_pixel, &game.img.line_length,
 				&game.img.endian);
-		draw_map(&game);
+		//draw_map(&game);
 		raycasting(&game);
 		mlx_put_image_to_window(game.mlx, game.win, game.img.img, 0, 0);
 		mlx_hook(game.win, 17, 1L << 0, close_window, &game);
