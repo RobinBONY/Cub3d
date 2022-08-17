@@ -6,7 +6,7 @@
 /*   By: rbony <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/15 13:26:50 by rbony             #+#    #+#             */
-/*   Updated: 2022/08/17 17:47:33 by rbony            ###   ########lyon.fr   */
+/*   Updated: 2022/08/17 18:04:39 by rbony            ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -241,7 +241,7 @@ void	raycasting(t_game *game)
 		if (ray.ra >= (3 * (M_PI / 2)) && ray.ra < (2 * M_PI))
 			dist = bot_right(game, &ray);
 		//brest(game, game->player.x, game->player.y, ray.c.x, ray.c.y);
-		draw_line(game, r, game->win_height / 2, dist);
+		draw_line(game, r, (game->win_height / 2) - (dist * 3 / 2), dist * 3);
 		r++;
 		ray.ra = fixang(ray.ra + (M_PI / 3) / (game->win_width));
 	}
