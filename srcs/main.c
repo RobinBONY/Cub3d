@@ -6,7 +6,7 @@
 /*   By: rbony <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/09 15:38:45 by rbony             #+#    #+#             */
-/*   Updated: 2022/08/17 17:45:48 by rbony            ###   ########lyon.fr   */
+/*   Updated: 2022/08/18 14:10:16 by rbony            ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,7 @@ int	manage_events(int keycode, t_game *game)
 	{
 		game->pa = fixang(game->pa + M_PI / 25);
 	}
-	//draw_map(game);
+	draw_map(game);
 	raycasting(game);
 	mlx_put_image_to_window(game->mlx, game->win, game->img.img, 0, 0);
 	return (0);
@@ -64,7 +64,7 @@ void	init(t_game *game)
 	game->win_height = 1080;
 	game->player.x = 7 * 64 + 32;
 	game->player.y = 3 * 64 + 32;
-	game->pa = M_PI / 4;
+	game->pa = (3 * (M_PI / 2));
 }
 
 int	main(int argc, char **argv)
@@ -81,7 +81,7 @@ int	main(int argc, char **argv)
 		game.img.addr = mlx_get_data_addr(game.img.img,
 				&game.img.bits_per_pixel, &game.img.line_length,
 				&game.img.endian);
-		//draw_map(&game);
+		draw_map(&game);
 		raycasting(&game);
 		mlx_put_image_to_window(game.mlx, game.win, game.img.img, 0, 0);
 		mlx_hook(game.win, 17, 1L << 0, close_window, &game);
