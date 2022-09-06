@@ -6,7 +6,7 @@
 /*   By: rbony <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/09 15:38:45 by rbony             #+#    #+#             */
-/*   Updated: 2022/08/18 14:10:16 by rbony            ###   ########lyon.fr   */
+/*   Updated: 2022/09/06 14:25:24 by rbony            ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,21 +37,17 @@ int	manage_events(int keycode, t_game *game)
 	if (keycode == 65307 || keycode == 53)
 		close_window(game);
 	if (keycode == 13)
-		game->player.y -= 10;
+		game->player.y -= 0.01;
 	if (keycode == 1)
-		game->player.y += 10;
+		game->player.y += 0.01;
 	if (keycode == 0)
-		game->player.x -= 10;
+		game->player.x -= 0.01;
 	if (keycode == 2)
-		game->player.x += 10;
+		game->player.x += 0.01;
 	if (keycode == 124)
-	{
 		game->pa = fixang(game->pa - M_PI / 25);
-	}
 	if (keycode == 123)
-	{
 		game->pa = fixang(game->pa + M_PI / 25);
-	}
 	draw_map(game);
 	raycasting(game);
 	mlx_put_image_to_window(game->mlx, game->win, game->img.img, 0, 0);
@@ -62,9 +58,10 @@ void	init(t_game *game)
 {
 	game->win_width = 1920;
 	game->win_height = 1080;
-	game->player.x = 7 * 64 + 32;
-	game->player.y = 3 * 64 + 32;
-	game->pa = (3 * (M_PI / 2));
+	game->cellsize = 64;
+	game->player.x = 7.7;
+	game->player.y = 3.3;
+	game->pa = M_PI / 4;
 }
 
 int	main(int argc, char **argv)

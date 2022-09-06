@@ -6,7 +6,7 @@
 /*   By: rbony <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/15 13:26:50 by rbony             #+#    #+#             */
-/*   Updated: 2022/08/18 16:56:14 by rbony            ###   ########lyon.fr   */
+/*   Updated: 2022/09/06 14:31:02 by rbony            ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -126,216 +126,114 @@ int	in_map(t_game *game, int x, int y)
 	return (0);
 }
 
-int	check_top_right_collision(t_game *game, t_raycasting *ray)
+t_point	create_vect(t_point origin, double radian, double length)
 {
-	int	cx;
-	int	cy;
+	t_point	vector;
 
-	cx = ray->c.x / 64;
-	cy = (ray->c.y - 1) / 64;
-	if (!in_map(game, cx, cy))
-		return (0);
-	if ((in_map(game, cx, cy)
-			&& game->map[cy][cx])
-		|| ((in_map(game, cx, cy + 1)
-		&& game->map[cy + 1][cx])
-		&& (in_map(game, cx - 1, cy)
-		&& game->map[cy][cx - 1])))
-		return (0);
-	return (1);
+	vector.x = cos(-radian) * length + origin.x;
+	vector.y = sin(-radian) * length + origin.y;
+	return (vector);
 }
 
-double	top_right(t_game *game, t_raycasting *ray)
+t_vector	init_vector(t_point start, t_point dest)
 {
-	ray->c = game->player;
-	while (check_top_right_collision(game, ray))
+	t_vector	v;
+
+	v.dx = dest.x - start.x;
+	v.dy = dest.y - start.y;
+	return (v);
+}
+
+t_raycasting	dda(t_game *game, float ra)
+{
+	t_raycasting		ray;
+
+	ray.map_x = (int)game->player.x;
+	ray.map_y = (int)game->player.y;
+	ray.dir = init_vector(game->player, create_vect(game->player, ra, 3));
+	if (ray.dir.dx == 0.0f)
+		ray.delta_dist.dx = 1e30;
+	else
+		ray.delta_dist.dx = ft_abs_f(1.0f / ray.dir.dx);
+	if (ray.dir.dy == 0.0f)
+		ray.delta_dist.dy = 1e30;
+	else
+		ray.delta_dist.dy = ft_abs_f(1.0f / ray.dir.dy);
+	//
+	if (ray.dir.dx < 0)
 	{
-		ray->cx = ray->c;
-		ray->cy = ray->c;
-		ray->dx = 64 - (ray->c.x % 64);
-		ray->dy = ray->c.y % 64;
-		if (ray->dy == 0)
-			ray->dy = 64;
-		if (check_tan(tan(ray->ra)))
-			ray->c.x += ray->dx;
-		else if (check_tan(tan(M_PI / 2 - ray->ra)))
-			ray->c.y -= ray->dy;
+		ray.step.x = -1;
+		ray.side_dist.dx = (game->player.x - ray.map_x) * ray.delta_dist.dx;
+	}
+	else
+	{
+		ray.step.x = 1;
+		ray.side_dist.dx = (ray.map_x + 1.0f - game->player.x)
+			* ray.delta_dist.dx;
+	}
+	if (ray.dir.dy < 0)
+	{
+		ray.step.y = -1;
+		ray.side_dist.dy = (game->player.y - ray.map_y) * ray.delta_dist.dy;
+	}
+	else
+	{
+		ray.step.y = 1;
+		ray.side_dist.dy = (ray.map_y + 1.0f - game->player.y)
+			* ray.delta_dist.dy;
+	}
+	//
+	while (1)
+	{
+		if (ray.side_dist.dx < ray.side_dist.dy)
+		{
+			ray.side_dist.dx += ray.delta_dist.dx;
+			ray.map_x += ray.step.x;
+			ray.side_hit.x = ray.step.x;
+			ray.side_hit.y = 0;
+		}
 		else
 		{
-			ray->cx.x += ray->dx;
-			ray->cx.y -= tan(ray->ra) * ray->dx;
-			ray->cy.x += tan(M_PI / 2 - ray->ra) * ray->dy;
-			ray->cy.y -= ray->dy;
-			nearest_point(ray);
+			ray.side_dist.dy += ray.delta_dist.dy;
+			ray.map_y += ray.step.y;
+			ray.side_hit.y = ray.step.y;
+			ray.side_hit.x = 0;
 		}
-	}
-	return (sqrt(pow(game->player.x - ray->c.x, 2)
-			+ pow(game->player.y - ray->c.y, 2)));
-}
-
-int	check_top_left_collision(t_game *game, t_raycasting *ray)
-{
-	int	cx;
-	int	cy;
-
-	cx = (ray->c.x - 1) / 64;
-	cy = (ray->c.y - 1) / 64;
-	if (!in_map(game, cx, cy))
-		return (0);
-	if ((in_map(game, cx, cy)
-			&& game->map[cy][cx])
-		|| ((in_map(game, cx, cy + 1)
-		&& game->map[cy + 1][cx])
-		&& (in_map(game, cx + 1, cy)
-		&& game->map[cy][cx + 1])))
-		return (0);
-	return (1);
-}
-
-double	top_left(t_game *game, t_raycasting *ray)
-{
-	ray->c = game->player;
-	while (check_top_left_collision(game, ray))
-	{
-		ray->cx = ray->c;
-		ray->cy = ray->c;
-		ray->dx = ray->c.x % 64;
-		ray->dy = ray->c.y % 64;
-		if (ray->dx == 0)
-			ray->dx = 64;
-		if (ray->dy == 0)
-			ray->dy = 64;
-		if (check_tan(tan(ray->ra - (M_PI / 2))))
-			ray->c.y -= ray->dy;
-		else if (check_tan(tan(M_PI / 2 - (ray->ra - (M_PI / 2)))))
-			ray->c.x -= ray->dx;
-		else
+		if (game->map[ray.map_y][ray.map_x] == 1)
 		{
-			ray->cx.x -= ray->dx;
-			ray->cx.y -= tan(M_PI / 2 - (ray->ra - (M_PI / 2))) * ray->dx;
-			ray->cy.x -= tan(ray->ra - (M_PI / 2)) * ray->dy;
-			ray->cy.y -= ray->dy;
-			nearest_point(ray);
+			if (ray.side_hit.y == 0)
+				ray.perp_dist = (ray.side_dist.dx - ray.delta_dist.dx)
+					* game->cellsize;
+			else
+				ray.perp_dist = (ray.side_dist.dy - ray.delta_dist.dy)
+					* game->cellsize;
+			if (ray.side_hit.x == 1)
+				ray.side = 3;
+			else if (ray.side_hit.x == -1)
+				ray.side = 1;
+			else if (ray.side_hit.y == 1)
+				ray.side = 0;
+			else
+				ray.side = 2;
+			return (ray);
 		}
 	}
-	return (sqrt(pow(game->player.x - ray->c.x, 2)
-			+ pow(game->player.y - ray->c.y, 2)));
-}
-
-int	check_bot_left_collision(t_game *game, t_raycasting *ray)
-{
-	int	cx;
-	int	cy;
-
-	cx = (ray->c.x - 1) / 64;
-	cy = ray->c.y / 64;
-	if (!in_map(game, cx, cy))
-		return (0);
-	if ((in_map(game, cx, cy)
-			&& game->map[cy][cx])
-		|| ((in_map(game, cx, cy - 1)
-		&& game->map[cy - 1][cx])
-		&& (in_map(game, cx + 1, cy)
-		&& game->map[cy][cx + 1])))
-		return (0);
-	return (1);
-}
-
-double	bot_left(t_game *game, t_raycasting *ray)
-{
-	ray->c = game->player;
-	while (check_bot_left_collision(game, ray))
-	{
-		ray->cx = ray->c;
-		ray->cy = ray->c;
-		ray->dx = ray->c.x % 64;
-		ray->dy = 64 - (ray->c.y % 64);
-		if (ray->dx == 0)
-			ray->dx = 64;
-		if (check_tan(tan(ray->ra - M_PI)))
-			ray->c.x -= ray->dx;
-		else if (check_tan(tan(M_PI / 2 - (ray->ra - M_PI))))
-			ray->c.y += ray->dy;
-		else
-		{
-			ray->cx.x -= ray->dx;
-			ray->cx.y += tan(ray->ra - M_PI) * ray->dx;
-			ray->cy.x -= tan(M_PI / 2 - (ray->ra - M_PI)) * ray->dy;
-			ray->cy.y += ray->dy;
-			nearest_point(ray);
-		}
-	}
-	return (sqrt(pow(game->player.x - ray->c.x, 2)
-			+ pow(game->player.y - ray->c.y, 2)));
-}
-
-int	check_bot_right_collision(t_game *game, t_raycasting *ray)
-{
-	int	cx;
-	int	cy;
-
-	cx = ray->c.x / 64;
-	cy = ray->c.y / 64;
-	if (!in_map(game, cx, cy))
-		return (0);
-	if (in_map(game, cx, cy)
-		&& game->map[cy][cx])
-		return (0);
-	return (1);
-}
-
-double	bot_right(t_game *game, t_raycasting *ray)
-{
-	ray->c = game->player;
-	while (check_bot_right_collision(game, ray))
-	{
-		ray->cx = ray->c;
-		ray->cy = ray->c;
-		ray->dx = 64 - (ray->c.x % 64);
-		ray->dy = 64 - (ray->c.y % 64);
-		if (check_tan(tan(ray->ra - (3 * (M_PI / 2)))))
-			ray->c.y += ray->dy;
-		else if (check_tan(tan(M_PI / 2 - (ray->ra - (3 * (M_PI / 2))))))
-			ray->c.x += ray->dx;
-		else
-		{
-			ray->cx.x += ray->dx;
-			ray->cx.y += tan(M_PI / 2 - (ray->ra - (3 * (M_PI / 2)))) * ray->dx;
-			ray->cy.x += tan(ray->ra - (3 * (M_PI / 2))) * ray->dy;
-			ray->cy.y += ray->dy;
-			nearest_point(ray);
-		}
-	}
-	return (sqrt(pow(game->player.x - ray->c.x, 2)
-			+ pow(game->player.y - ray->c.y, 2)));
+	return (ray);
 }
 
 void	raycasting(t_game *game)
 {
-	int				r;
-	double			dist;
-	double			limit;
-	t_raycasting	ray;
+	int		nbr;
+	float	ra;
 
 	//draw_background(game);
-	ray.ra = game->pa + (M_PI / 3) / 2;
-	r = 0;
-	limit = (M_PI / 3) / (game->win_width / 3);
-	while (r < game->win_width / 3)
+	nbr = 0;
+	ra = game->pa - (M_PI / 3) / 2;
+	while (nbr < game->win_width)
 	{
-		if (ray.ra > 0 && ray.ra <= (M_PI / 2))
-			dist = top_right(game, &ray);
-		if (ray.ra > (M_PI / 2) && ray.ra <= M_PI)
-			dist = top_left(game, &ray);
-		if (ray.ra > M_PI && ray.ra <= (3 * (M_PI / 2)))
-			dist = bot_left(game, &ray);
-		if (ray.ra > (3 * (M_PI / 2)) && ray.ra <= (2 * M_PI))
-			dist = bot_right(game, &ray);
-		if (r % 5 == 0)
-			brest(game, game->player.x, game->player.y, ray.c.x, ray.c.y);
-		//draw_column(game, r, (game->win_height / 2) - (dist * 3 / 2), dist * 3);
-		r++;
-		ray.ra = fixang(ray.ra + limit);
+		dda(game, ra);
+		ra += (M_PI / 3) / game->win_width;
+		nbrr++;
 	}
 }
 

@@ -6,7 +6,7 @@
 /*   By: rbony <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/09 15:34:36 by rbony             #+#    #+#             */
-/*   Updated: 2022/08/17 14:18:52 by rbony            ###   ########lyon.fr   */
+/*   Updated: 2022/09/06 14:29:25 by rbony            ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,19 +25,15 @@
 
 typedef struct s_point
 {
-	int	x;
-	int	y;
+	float	x;
+	float	y;
 }				t_point;
 
-typedef struct s_raycasting
+typedef struct s_vector
 {
-	int				dx;
-	int				dy;
-	struct s_point	c;
-	struct s_point	cx;
-	struct s_point	cy;
-	double			ra;
-}				t_raycasting;
+	float	dx;
+	float	dy;
+}				t_vector;
 
 typedef struct s_data {
 	void	*img;
@@ -64,6 +60,20 @@ typedef struct s_texture
 	struct s_color		c_color;
 }				t_texture;
 
+typedef struct s_raycasting
+{
+	struct s_vector	dir;
+	struct s_point	step;
+	struct s_point	side_hit;
+	struct s_vector	delta_dist;
+	struct s_vector	side_dist;
+	float			dist;
+	float			perp_dist;
+	int				map_x;
+	int				map_y;
+	int				side;
+}					t_raycasting;
+
 typedef struct s_game
 {
 	void				*mlx;
@@ -76,7 +86,8 @@ typedef struct s_game
 	int					map_width;
 	int					map_height;
 	struct s_point		player;
-	double				pa;
+	float				pa;
+	int					cellsize;
 }				t_game;
 
 // read_map
