@@ -6,7 +6,7 @@
 /*   By: rbony <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/15 13:26:50 by rbony             #+#    #+#             */
-/*   Updated: 2022/09/06 14:31:02 by rbony            ###   ########lyon.fr   */
+/*   Updated: 2022/09/07 12:34:51 by rbony            ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -102,23 +102,6 @@ void	draw_background(t_game *game)
 	}
 }
 
-void	nearest_point(t_raycasting *ray)
-{
-	int	dx;
-	int	dy;
-
-	dx = pow(ray->cx.x - ray->c.x, 2) + pow(ray->cx.y - ray->c.y, 2);
-	dy = pow(ray->cy.x - ray->c.x, 2) + pow(ray->cy.y - ray->c.y, 2);
-	if (dx < dy)
-		ray->c = ray->cx;
-	else
-		ray->c = ray->cy;
-	if (dx == 0)
-		ray->c = ray->cy;
-	if (dy == 0)
-		ray->c = ray->cx;
-}
-
 int	in_map(t_game *game, int x, int y)
 {
 	if (x > 0 && y > 0 && x < game->map_width && y < game->map_height)
@@ -154,11 +137,11 @@ t_raycasting	dda(t_game *game, float ra)
 	if (ray.dir.dx == 0.0f)
 		ray.delta_dist.dx = 1e30;
 	else
-		ray.delta_dist.dx = ft_abs_f(1.0f / ray.dir.dx);
+		ray.delta_dist.dx = fabsf(1.0f / ray.dir.dx);
 	if (ray.dir.dy == 0.0f)
 		ray.delta_dist.dy = 1e30;
 	else
-		ray.delta_dist.dy = ft_abs_f(1.0f / ray.dir.dy);
+		ray.delta_dist.dy = fabsf(1.0f / ray.dir.dy);
 	//
 	if (ray.dir.dx < 0)
 	{
@@ -225,15 +208,17 @@ void	raycasting(t_game *game)
 {
 	int		nbr;
 	float	ra;
+	t_raycasting	ray;
 
 	//draw_background(game);
 	nbr = 0;
 	ra = game->pa - (M_PI / 3) / 2;
 	while (nbr < game->win_width)
 	{
-		dda(game, ra);
+		ray = dda(game, ra);
+		brest(game, game->player.x * 64, game->player.y * 64, ray.side_dist.dx * 64, ray.side_dist.dy * 64);
 		ra += (M_PI / 3) / game->win_width;
-		nbrr++;
+		nbr++;
 	}
 }
 

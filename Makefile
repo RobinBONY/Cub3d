@@ -6,7 +6,7 @@
 #    By: rbony <marvin@42.fr>                       +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/01/28 08:34:54 by rbony             #+#    #+#              #
-#    Updated: 2022/08/18 16:01:21 by rbony            ###   ########lyon.fr    #
+#    Updated: 2022/09/07 12:32:23 by rbony            ###   ########lyon.fr    #
 #                                                                              #
 # **************************************************************************** #
 
@@ -33,21 +33,21 @@ all: lib ${NAME}
 # linux ${CC} ${OBJS} -Llibft -lft -Lmlx/mlx_linux -lmlx -lXext -lX11 -o $(NAME)
 # mac   ${CC} ${OBJS} -Llibft -lft -Lmlx/mlx_mac -lmlx -framework OpenGL -framework Appkit -o $(NAME)
 $(NAME): ${OBJS}
-	${CC} ${OBJS} -Llibft -lft -Lmlx/mlx_mac -lmlx -framework OpenGL -framework Appkit -o $(NAME)
+	${CC} ${OBJS} -Llibft -lft -Lmlx/mlx_linux -lmlx -lXext -lX11 -o $(NAME)
 
 %.o: %.c ${INCLUDES} Makefile
 	${CC} ${FLAGS} -Imlx -Ift -c $< -o $@
 
 clean:
 	${RM} ${OBJS}
-	make clean -C mlx/mlx_mac
+	make clean -C mlx/mlx_linux
 	make clean -C libft
 
 fclean:	clean
 	${RM} ${NAME} ${EXECUTABLE}
 
 lib:
-	make -C mlx/mlx_mac
+	make -C mlx/mlx_linux
 	make -C libft
 
 re:	fclean all
