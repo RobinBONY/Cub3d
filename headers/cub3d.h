@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cub3d.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rbony <marvin@42.fr>                       +#+  +:+       +#+        */
+/*   By: alakhdar <<marvin@42.fr>>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/09 15:34:36 by rbony             #+#    #+#             */
-/*   Updated: 2022/09/20 12:56:48 by rbony            ###   ########lyon.fr   */
+/*   Updated: 2022/09/20 14:17:40 by alakhdar         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -110,6 +110,7 @@ int				split_size(char **split);
 float			fixang(float a);
 void			raycasting(t_game *game);
 int				in_map(t_game *game, int x, int y);
+int				get_text_pix(t_texture *texture, int x, int y);
 t_raycasting	dda(t_game *game, float ra);
 t_point			create_vect(t_point origin, float radian, float length);
 t_vector		init_vector(t_point start, t_point dest);

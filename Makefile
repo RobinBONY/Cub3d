@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: rbony <marvin@42.fr>                       +#+  +:+       +#+         #
+#    By: alakhdar <<marvin@42.fr>>                  +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/01/28 08:34:54 by rbony             #+#    #+#              #
-#    Updated: 2022/09/20 12:59:09 by rbony            ###   ########lyon.fr    #
+#    Updated: 2022/09/20 14:18:33 by alakhdar         ###   ########lyon.fr    #
 #                                                                              #
 # **************************************************************************** #
 
@@ -19,7 +19,8 @@ SRCS = 	srcs/main.c	\
 		srcs/read_map/roue_libre.c \
 		srcs/raycasting/raycasting.c \
 		srcs/raycasting/raycasting_utils.c \
-		srcs/raycasting/dda.c
+		srcs/raycasting/dda.c	\
+		srcs/texture.c
 
 OBJS = ${SRCS:.c=.o}
 
