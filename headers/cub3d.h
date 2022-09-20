@@ -6,7 +6,7 @@
 /*   By: rbony <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/09 15:34:36 by rbony             #+#    #+#             */
-/*   Updated: 2022/09/06 14:29:25 by rbony            ###   ########lyon.fr   */
+/*   Updated: 2022/09/20 12:56:48 by rbony            ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,31 +87,31 @@ typedef struct s_game
 	int					map_height;
 	struct s_point		player;
 	float				pa;
-	int					cellsize;
 }				t_game;
 
 // read_map
-int			read_map(t_game *game, char *mapname);
+int				read_map(t_game *game, char *mapname);
 
 //check_map
-int			check_ext(char *str, char *ext);
-int			check_closed_height(char *str);
-int			check_closed_width(char *str);
-int			create_int_map(t_game *game, t_list *list);
-int			check_map_layout(t_list *head, t_game *game);
-void		print_data(t_game *game);
-void		fill_int_map(t_game *game, t_list *list);
-int			check_closed_width(char *str);
-int			check_closed_sides(char *str);
+int				check_ext(char *str, char *ext);
+int				check_closed_height(char *str);
+int				check_closed_width(char *str);
+int				create_int_map(t_game *game, t_list *list);
+int				check_map_layout(t_list *head, t_game *game);
+void			print_data(t_game *game);
+void			fill_int_map(t_game *game, t_list *list);
+int				check_closed_width(char *str);
+int				check_closed_sides(char *str);
 
-int			error_1(char *str);
-int			error_2(char *str1, char *str2);
-int			parse_textures(t_game *game, t_list **list);
-int			split_size(char **split);
-void		draw(t_game *game);
-void		draw_background(t_game *game);
-void		draw_map(t_game *game);
-double		fixang(double a);
-void		raycasting(t_game *game);
+int				error_1(char *str);
+int				error_2(char *str1, char *str2);
+int				parse_textures(t_game *game, t_list **list);
+int				split_size(char **split);
+float			fixang(float a);
+void			raycasting(t_game *game);
+int				in_map(t_game *game, int x, int y);
+t_raycasting	dda(t_game *game, float ra);
+t_point			create_vect(t_point origin, float radian, float length);
+t_vector		init_vector(t_point start, t_point dest);
 
 #endif
