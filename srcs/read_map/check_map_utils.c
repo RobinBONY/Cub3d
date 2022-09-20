@@ -6,7 +6,7 @@
 /*   By: rbony <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/11 12:44:43 by alakhdar          #+#    #+#             */
-/*   Updated: 2022/08/13 16:50:35 by rbony            ###   ########lyon.fr   */
+/*   Updated: 2022/08/15 13:22:29 by rbony            ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,10 +37,10 @@ void	print_data(t_game *game)
 	printf("f color : %d,%d,%d\n", game->textures.f_color.r, game->textures.f_color.g, game->textures.f_color.b);
 	printf("c color : %d,%d,%d\n", game->textures.c_color.r, game->textures.c_color.g, game->textures.c_color.b);
 	i = 0;
-	while (i < game->height)
+	while (i < game->map_height)
 	{
 		j = 0;
-		while (j < game->width)
+		while (j < game->map_width)
 		{
 			printf("%d\t", game->map[i][j]);
 			j++;
@@ -58,10 +58,10 @@ void	fill_int_map(t_game *game, t_list *list)
 
 	h = 0;
 	tmp = list;
-	while (h < game->height)
+	while (h < game->map_height)
 	{
 		i = 0;
-		while (i < game->width)
+		while (i < game->map_width)
 		{
 			if (i < (int)ft_strlen(tmp->content) && tmp->content[i] - '0' >= 0)
 				game->map[h][i] = tmp->content[i] - '0';

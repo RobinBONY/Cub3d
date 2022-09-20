@@ -6,7 +6,7 @@
 #    By: rbony <marvin@42.fr>                       +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/01/28 08:34:54 by rbony             #+#    #+#              #
-#    Updated: 2022/08/13 17:21:35 by rbony            ###   ########lyon.fr    #
+#    Updated: 2022/09/20 12:59:09 by rbony            ###   ########lyon.fr    #
 #                                                                              #
 # **************************************************************************** #
 
@@ -16,16 +16,19 @@ SRCS = 	srcs/main.c	\
 		srcs/read_map/read_map.c	\
 		srcs/read_map/check_map.c	\
 		srcs/read_map/check_map_utils.c \
-		srcs/read_map/roue_libre.c
+		srcs/read_map/roue_libre.c \
+		srcs/raycasting/raycasting.c \
+		srcs/raycasting/raycasting_utils.c \
+		srcs/raycasting/dda.c
 
 OBJS = ${SRCS:.c=.o}
 
 INCLUDES = headers/cub3d.h
 
-CC = gcc #-fsanitize=address,leak
+CC = gcc -g -fsanitize=address
 RM = rm -f
 
-FLAGS = -Wall -Wextra -Werror
+FLAGS = -Wall -Wextra -Werror -O3
 
 all: lib ${NAME}
 

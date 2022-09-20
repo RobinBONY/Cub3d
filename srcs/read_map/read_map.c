@@ -6,7 +6,7 @@
 /*   By: rbony <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/10 17:08:31 by rbony             #+#    #+#             */
-/*   Updated: 2022/08/13 17:23:53 by rbony            ###   ########lyon.fr   */
+/*   Updated: 2022/09/07 12:33:03 by rbony            ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,9 +57,6 @@ static t_list	*fill_map_list(char *mapname)
 
 int	parse_map(t_game *game, t_list *list)
 {
-	int	i;
-
-	i = 0;
 	if (check_map_layout(list, game))
 		return (1);
 	return (create_int_map(game, list));

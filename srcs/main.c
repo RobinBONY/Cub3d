@@ -6,7 +6,7 @@
 /*   By: rbony <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/09 15:38:45 by rbony             #+#    #+#             */
-/*   Updated: 2022/08/15 09:49:19 by rbony            ###   ########lyon.fr   */
+/*   Updated: 2022/09/20 13:41:50 by rbony            ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ static int	close_window(t_game *game)
 	int	i;
 
 	i = 0;
-	while (i < game->height)
+	while (i < game->map_height)
 	{
 		free(game->map[i]);
 		i++;
@@ -32,12 +32,39 @@ static int	close_window(t_game *game)
 	return (0);
 }
 
+t_point	check_move(t_game *game, t_point new_pos)
+{
+	if (game->map[(int)(new_pos.y * 1.025)][(int)(new_pos.x * 1.025)] == 1)
+		return (game->player);
+	return (new_pos);
+}
+
 int	manage_events(int keycode, t_game *game)
 {
-	printf("%d\n", keycode);
 	if (keycode == 65307 || keycode == 53)
 		close_window(game);
+	if (keycode == 13)
+		game->player = check_move(game, create_vect(game->player,
+					game->pa, 0.05));
+	if (keycode == 1)
+		game->player = check_move(game, create_vect(game->player,
+					game->pa, -0.05));
+	if (keycode == 2)
+		game->pa = fixang(game->pa - M_PI / 50);
+	if (keycode == 0)
+		game->pa = fixang(game->pa + M_PI / 50);
+	raycasting(game);
+	mlx_put_image_to_window(game->mlx, game->win, game->img.img, 0, 0);
 	return (0);
+}
+
+void	init(t_game *game)
+{
+	game->win_width = 1600;
+	game->win_height = 1200;
+	game->player.x = 7.5;
+	game->player.y = 2.5;
+	game->pa = M_PI;
 }
 
 int	main(int argc, char **argv)
@@ -46,8 +73,16 @@ int	main(int argc, char **argv)
 
 	if (argc == 2 && !read_map(&game, argv[1]))
 	{
+		init(&game);
 		game.mlx = mlx_init();
-		game.win = mlx_new_window(game.mlx, 1920, 1080, "Cub3D");
+		game.win = mlx_new_window(game.mlx, game.win_width,
+				game.win_height, "Cub3D");
+		game.img.img = mlx_new_image(game.mlx, 1600, 1200);
+		game.img.addr = mlx_get_data_addr(game.img.img,
+				&game.img.bits_per_pixel, &game.img.line_length,
+				&game.img.endian);
+		raycasting(&game);
+		mlx_put_image_to_window(game.mlx, game.win, game.img.img, 0, 0);
 		mlx_hook(game.win, 17, 1L << 0, close_window, &game);
 		mlx_hook(game.win, 02, 1L << 0, manage_events, &game);
 		mlx_loop(game.mlx);
