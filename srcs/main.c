@@ -6,7 +6,7 @@
 /*   By: rbony <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/09 15:38:45 by rbony             #+#    #+#             */
-/*   Updated: 2022/09/20 13:41:50 by rbony            ###   ########lyon.fr   */
+/*   Updated: 2022/09/27 14:28:55 by rbony            ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ static int	close_window(t_game *game)
 
 t_point	check_move(t_game *game, t_point new_pos)
 {
-	if (game->map[(int)(new_pos.y * 1.025)][(int)(new_pos.x * 1.025)] == 1)
+	if (game->map[(int)(new_pos.y)][(int)(new_pos.x)] == 1)
 		return (game->player);
 	return (new_pos);
 }
@@ -60,11 +60,11 @@ int	manage_events(int keycode, t_game *game)
 
 void	init(t_game *game)
 {
-	game->win_width = 1600;
-	game->win_height = 1200;
+	game->win_width = 1920;
+	game->win_height = 1080;
 	game->player.x = 7.5;
-	game->player.y = 2.5;
-	game->pa = M_PI;
+	game->player.y = 3.5;
+	game->pa = M_PI / 2;
 }
 
 int	main(int argc, char **argv)
@@ -77,7 +77,7 @@ int	main(int argc, char **argv)
 		game.mlx = mlx_init();
 		game.win = mlx_new_window(game.mlx, game.win_width,
 				game.win_height, "Cub3D");
-		game.img.img = mlx_new_image(game.mlx, 1600, 1200);
+		game.img.img = mlx_new_image(game.mlx, 1920, 1080);
 		game.img.addr = mlx_get_data_addr(game.img.img,
 				&game.img.bits_per_pixel, &game.img.line_length,
 				&game.img.endian);

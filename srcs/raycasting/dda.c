@@ -6,7 +6,7 @@
 /*   By: rbony <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/19 14:32:47 by rbony             #+#    #+#             */
-/*   Updated: 2022/09/20 13:04:20 by rbony            ###   ########lyon.fr   */
+/*   Updated: 2022/09/27 14:29:43 by rbony            ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,7 @@ static t_raycasting	init_dda(t_game *game, float ra)
 
 	ray.map_x = (int)game->player.x;
 	ray.map_y = (int)game->player.y;
-	ray.dir = init_vector(game->player, create_vect(game->player, ra, 1));
+	ray.dir = init_vector(game->player, create_vect(game->player, ra, 2.5));
 	if (ray.dir.dx == 0.0f)
 		ray.delta_dist.dx = 1e30;
 	else
@@ -81,10 +81,10 @@ static float	perp_dist(t_raycasting ray, t_game *game, float ra)
 
 	if (ray.side_hit.y == 0)
 		line = ((ray.side_dist.dx - ray.delta_dist.dx)
-				* cos(fixang(game->pa - ra)));
+				* cos(game->pa - ra));
 	else
 		line = ((ray.side_dist.dy - ray.delta_dist.dy)
-				* cos(fixang(game->pa - ra)));
+				* cos(game->pa - ra));
 	return (line);
 }
 
