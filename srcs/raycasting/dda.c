@@ -6,7 +6,7 @@
 /*   By: rbony <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/19 14:32:47 by rbony             #+#    #+#             */
-/*   Updated: 2022/09/27 14:29:43 by rbony            ###   ########lyon.fr   */
+/*   Updated: 2022/09/28 12:58:39 by rbony            ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,13 +38,13 @@ static void	define_side(t_game *game, t_raycasting *ray)
 	}
 }
 
-static t_raycasting	init_dda(t_game *game, float ra)
+static t_raycasting	init_dda(t_game *game, float ra, float camera)
 {
 	t_raycasting		ray;
 
 	ray.map_x = (int)game->player.x;
 	ray.map_y = (int)game->player.y;
-	ray.dir = init_vector(game->player, create_vect(game->player, ra, 2.5));
+	ray.dir = init_vector(game->player, create_vect(game->player, ra, 1), camera);
 	if (ray.dir.dx == 0.0f)
 		ray.delta_dist.dx = 1e30;
 	else
@@ -88,11 +88,11 @@ static float	perp_dist(t_raycasting ray, t_game *game, float ra)
 	return (line);
 }
 
-t_raycasting	dda(t_game *game, float ra)
+t_raycasting	dda(t_game *game, float ra, int nbr)
 {
 	t_raycasting		ray;
 
-	ray = init_dda(game, ra);
+	ray = init_dda(game, ra, 2 * nbr / game->win_width);
 	while (1)
 	{
 		next_collision(&ray);

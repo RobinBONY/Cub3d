@@ -6,7 +6,7 @@
 /*   By: rbony <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/19 14:32:48 by rbony             #+#    #+#             */
-/*   Updated: 2022/09/27 14:26:12 by rbony            ###   ########lyon.fr   */
+/*   Updated: 2022/09/28 13:03:05 by rbony            ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,7 @@ static void	draw_column(t_game *game, int x, t_raycasting *ray)
 	int	len;
 	int	tmpy;
 
-	len = game->win_height / 2 / ray->perp_dist;
+	len = game->win_height / ray->perp_dist;
 	if (len > game->win_height)
 		len = game->win_height;
 	y = game->win_height / 2 - len / 2;
@@ -81,17 +81,15 @@ void	raycasting(t_game *game)
 	int				nbr;
 	float			ra;
 	t_raycasting	ray;
-	t_point			col;
 
 	draw_background(game);
 	nbr = 0;
-	ra = game->pa + (70 * M_PI / 180) / 2;
+	ra = game->pa + (75 * M_PI / 180) / 2;
 	while (nbr < game->win_width)
 	{
-		ray = dda(game, ra);
-		col = create_vect(game->player, ra, ray.perp_dist);
+		ray = dda(game, ra, nbr);
 		draw_column(game, nbr, &ray);
-		ra -= fixang((70 * M_PI / 180) / game->win_width);
+		ra -= fixang((75 * M_PI / 180) / game->win_width);
 		nbr++;
 	}
 }
