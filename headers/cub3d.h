@@ -6,7 +6,7 @@
 /*   By: rbony <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/09 15:34:36 by rbony             #+#    #+#             */
-/*   Updated: 2022/09/28 12:54:28 by rbony            ###   ########lyon.fr   */
+/*   Updated: 2022/09/30 12:21:52 by rbony            ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -112,5 +112,10 @@ void			raycasting(t_game *game);
 int				in_map(t_game *game, int x, int y);
 t_raycasting	dda(t_game *game, float ra, int nbr);
 t_point			create_vect(t_point origin, float radian, float len);
-t_vector		init_vector(t_point start, t_point dest, float camera);
+t_vector		init_vector(t_point start, t_point dest, int camera);
+void			draw_map(t_game *game);
+void	draw_background(t_game *game);
+void	my_mlx_pixel_put(t_game *game, int x, int y, int color);
+void	brest(t_game *env, int sx, int sy, int ex, int ey);
+
 #endif

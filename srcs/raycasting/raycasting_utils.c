@@ -6,7 +6,7 @@
 /*   By: rbony <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/19 14:32:49 by rbony             #+#    #+#             */
-/*   Updated: 2022/09/28 12:53:09 by rbony            ###   ########lyon.fr   */
+/*   Updated: 2022/09/30 12:21:44 by rbony            ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,11 +37,11 @@ t_point	create_vect(t_point origin, float radian, float length)
 	return (vector);
 }
 
-t_vector	init_vector(t_point start, t_point dest, float camera)
+t_vector	init_vector(t_point start, t_point dest, int camera)
 {
 	t_vector	v;
 
-	v.dx = (dest.x - start.x) * camera;
-	v.dy = (dest.y - start.y) * camera;
+	v.dx = (dest.x - start.x + 0) * camera;
+	v.dy = (dest.y - start.y + 0.7) * camera;
 	return (v);
 }

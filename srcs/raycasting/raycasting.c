@@ -6,13 +6,13 @@
 /*   By: rbony <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/19 14:32:48 by rbony             #+#    #+#             */
-/*   Updated: 2022/09/28 13:03:05 by rbony            ###   ########lyon.fr   */
+/*   Updated: 2022/09/30 12:22:54 by rbony            ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../headers/cub3d.h"
 
-static void	my_mlx_pixel_put(t_game *game, int x, int y, int color)
+void	my_mlx_pixel_put(t_game *game, int x, int y, int color)
 {
 	char	*dst;
 
@@ -35,7 +35,7 @@ int	set_color(int side)
 		return (0xFFFF00);
 }
 
-static void	draw_column(t_game *game, int x, t_raycasting *ray)
+void	draw_column(t_game *game, int x, t_raycasting *ray)
 {
 	int	i;
 	int	y;
@@ -55,7 +55,7 @@ static void	draw_column(t_game *game, int x, t_raycasting *ray)
 	}
 }
 
-static void	draw_background(t_game *game)
+void	draw_background(t_game *game)
 {
 	int	i;
 	int	j;
@@ -81,13 +81,17 @@ void	raycasting(t_game *game)
 	int				nbr;
 	float			ra;
 	t_raycasting	ray;
+	t_point			col;
 
 	draw_background(game);
+	//draw_map(game);
 	nbr = 0;
 	ra = game->pa + (75 * M_PI / 180) / 2;
 	while (nbr < game->win_width)
 	{
-		ray = dda(game, ra, nbr);
+		ray = dda(game, ra, 2 * nbr / game->win_width);
+		col = create_vect(game->player, ra, ray.perp_dist);
+		//brest(game, game->player.x * 64, game->player.y * 64, col.x * 64, col.y * 64);
 		draw_column(game, nbr, &ray);
 		ra -= fixang((75 * M_PI / 180) / game->win_width);
 		nbr++;
