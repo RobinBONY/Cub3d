@@ -6,7 +6,7 @@
 /*   By: rbony <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/15 13:26:50 by rbony             #+#    #+#             */
-/*   Updated: 2022/09/30 10:09:54 by rbony            ###   ########lyon.fr   */
+/*   Updated: 2022/09/30 12:58:41 by rbony            ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,19 +15,11 @@
 void	draw_square(t_game *game, int x, int y, int len)
 {
 	int				width;
-	int				tmpy;
-	int				i;
 
 	width = 0;
 	while (width < len)
 	{
-		i = 0;
-		tmpy = y + width;
-		while (i < len)
-		{
-			my_mlx_pixel_put(game, x + i, tmpy, 0xFF0000);
-			i++;
-		}
+		draw_column(game, x + width, y, len);
 		width++;
 	}
 }
@@ -53,6 +45,7 @@ void	draw_map(t_game *game)
 	int	i;
 	int	j;
 
+	draw_background(game);
 	i = 0;
 	while (i < game->map_height)
 	{
