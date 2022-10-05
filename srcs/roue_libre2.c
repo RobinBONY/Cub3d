@@ -6,27 +6,33 @@
 /*   By: rbony <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/15 13:26:50 by rbony             #+#    #+#             */
-/*   Updated: 2022/09/30 12:58:41 by rbony            ###   ########lyon.fr   */
+/*   Updated: 2022/10/05 14:26:52 by rbony            ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../headers/cub3d.h"
 
-void	draw_square(t_game *game, int x, int y, int len)
+void	draw_square(t_game *game, int x, int y)
 {
 	int				width;
+	int				i;
 
 	width = 0;
-	while (width < len)
+	while (width < 63)
 	{
-		draw_column(game, x + width, y, len);
+		i = 0;
+		while (i < 63)
+		{
+			my_mlx_pixel_put(game, x + i, y + width, 0xFF0000);
+			i++;
+		}
 		width++;
 	}
 }
 
 void	brest(t_game *env, int sx, int sy, int ex, int ey)
 {
-	float	i;
+	double	i;
 	int		tmpx;
 	int		tmpy;
 
@@ -53,7 +59,7 @@ void	draw_map(t_game *game)
 		while (j < game->map_width)
 		{
 			if (game->map[i][j] == 1)
-				draw_square(game, j * 64, i * 64, 63);
+				draw_square(game, j * 64, i * 64);
 			j++;
 		}
 		i++;

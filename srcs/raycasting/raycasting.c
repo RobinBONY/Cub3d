@@ -6,7 +6,7 @@
 /*   By: rbony <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/19 14:32:48 by rbony             #+#    #+#             */
-/*   Updated: 2022/09/30 12:22:54 by rbony            ###   ########lyon.fr   */
+/*   Updated: 2022/10/05 15:18:02 by rbony            ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,21 +79,18 @@ void	draw_background(t_game *game)
 void	raycasting(t_game *game)
 {
 	int				nbr;
-	float			ra;
 	t_raycasting	ray;
 	t_point			col;
 
 	draw_background(game);
-	//draw_map(game);
+	draw_map(game);
 	nbr = 0;
-	ra = game->pa + (75 * M_PI / 180) / 2;
 	while (nbr < game->win_width)
 	{
-		ray = dda(game, ra, 2 * nbr / game->win_width);
-		col = create_vect(game->player, ra, ray.perp_dist);
-		//brest(game, game->player.x * 64, game->player.y * 64, col.x * 64, col.y * 64);
-		draw_column(game, nbr, &ray);
-		ra -= fixang((75 * M_PI / 180) / game->win_width);
+		ray = dda(game, game->pa, (2 * nbr) / (double)game->win_width - 1);
+		col = create_vect(game->player, game->pa, ray.perp_dist);
+		brest(game, game->player.x * 64, game->player.y * 64, col.x * 64, col.y * 64);
+		//draw_column(game, nbr, &ray);
 		nbr++;
 	}
 }

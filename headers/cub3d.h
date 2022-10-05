@@ -6,7 +6,7 @@
 /*   By: rbony <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/09 15:34:36 by rbony             #+#    #+#             */
-/*   Updated: 2022/09/30 13:00:07 by rbony            ###   ########lyon.fr   */
+/*   Updated: 2022/10/05 14:26:23 by rbony            ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,14 +25,14 @@
 
 typedef struct s_point
 {
-	float	x;
-	float	y;
+	double	x;
+	double	y;
 }				t_point;
 
 typedef struct s_vector
 {
-	float	dx;
-	float	dy;
+	double	dx;
+	double	dy;
 }				t_vector;
 
 typedef struct s_data {
@@ -67,8 +67,8 @@ typedef struct s_raycasting
 	struct s_point	side_hit;
 	struct s_vector	delta_dist;
 	struct s_vector	side_dist;
-	float			dist;
-	float			perp_dist;
+	double			dist;
+	double			perp_dist;
 	int				map_x;
 	int				map_y;
 	int				side;
@@ -86,7 +86,7 @@ typedef struct s_game
 	int					map_width;
 	int					map_height;
 	struct s_point		player;
-	float				pa;
+	double				pa;
 }				t_game;
 
 // read_map
@@ -107,15 +107,15 @@ int				error_1(char *str);
 int				error_2(char *str1, char *str2);
 int				parse_textures(t_game *game, t_list **list);
 int				split_size(char **split);
-float			fixang(float a);
+double			fixang(double a);
 void			raycasting(t_game *game);
 int				in_map(t_game *game, int x, int y);
-t_raycasting	dda(t_game *game, float ra, int nbr);
-t_point			create_vect(t_point origin, float radian, float len);
-t_vector		init_vector(t_point start, t_point dest, int camera);
+t_raycasting	dda(t_game *game, double ra, double nbr);
+t_point			create_vect(t_point origin, double radian, double len);
+t_vector		init_vector(t_point start, t_point dest, double camera);
 void			draw_map(t_game *game);
-void	draw_background(t_game *game);
-void	my_mlx_pixel_put(t_game *game, int x, int y, int color);
-void	brest(t_game *env, int sx, int sy, int ex, int ey);
+void			draw_background(t_game *game);
+void			my_mlx_pixel_put(t_game *game, int x, int y, int color);
+void			brest(t_game *env, int sx, int sy, int ex, int ey);
 
 #endif

@@ -6,7 +6,7 @@
 /*   By: rbony <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/19 14:32:47 by rbony             #+#    #+#             */
-/*   Updated: 2022/09/30 12:22:01 by rbony            ###   ########lyon.fr   */
+/*   Updated: 2022/10/05 15:15:37 by rbony            ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@ static void	define_side(t_game *game, t_raycasting *ray)
 	}
 }
 
-static t_raycasting	init_dda(t_game *game, float ra, int camera)
+static t_raycasting	init_dda(t_game *game, double ra, double camera)
 {
 	t_raycasting		ray;
 
@@ -49,11 +49,11 @@ static t_raycasting	init_dda(t_game *game, float ra, int camera)
 	if (ray.dir.dx == 0.0f)
 		ray.delta_dist.dx = 1e30;
 	else
-		ray.delta_dist.dx = fabsf(1.0f / ray.dir.dx);
+		ray.delta_dist.dx = fabs(1.0f / ray.dir.dx);
 	if (ray.dir.dy == 0.0f)
 		ray.delta_dist.dy = 1e30;
 	else
-		ray.delta_dist.dy = fabsf(1.0f / ray.dir.dy);
+		ray.delta_dist.dy = fabs(1.0f / ray.dir.dy);
 	define_side(game, &ray);
 	return (ray);
 }
@@ -76,9 +76,9 @@ static void	next_collision(t_raycasting *ray)
 	}
 }
 
-static float	perp_dist(t_raycasting ray, t_game *game, float ra)
+static double	perp_dist(t_raycasting ray, t_game *game, double ra)
 {
-	float	line;
+	double	line;
 
 	if (ray.side_hit.y == 0)
 		line = ((ray.side_dist.dx - ray.delta_dist.dx)
@@ -89,7 +89,7 @@ static float	perp_dist(t_raycasting ray, t_game *game, float ra)
 	return (line);
 }
 
-t_raycasting	dda(t_game *game, float ra, int nbr)
+t_raycasting	dda(t_game *game, double ra, double nbr)
 {
 	t_raycasting		ray;
 
