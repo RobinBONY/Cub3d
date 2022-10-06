@@ -6,7 +6,7 @@
 /*   By: rbony <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/19 14:32:48 by rbony             #+#    #+#             */
-/*   Updated: 2022/10/05 15:18:02 by rbony            ###   ########lyon.fr   */
+/*   Updated: 2022/10/06 15:28:12 by rbony            ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,7 @@ void	draw_column(t_game *game, int x, t_raycasting *ray)
 	int	len;
 	int	tmpy;
 
-	len = game->win_height / ray->perp_dist;
+	len = (int)(game->win_height / ray->perp_dist);
 	if (len > game->win_height)
 		len = game->win_height;
 	y = game->win_height / 2 - len / 2;
@@ -87,10 +87,18 @@ void	raycasting(t_game *game)
 	nbr = 0;
 	while (nbr < game->win_width)
 	{
-		ray = dda(game, game->pa, (2 * nbr) / (double)game->win_width - 1);
-		col = create_vect(game->player, game->pa, ray.perp_dist);
-		brest(game, game->player.x * 64, game->player.y * 64, col.x * 64, col.y * 64);
+		ray.camera = 2 * nbr / (double)game->win_width - 1;
+		ray.ray_dir.dx = game->player.dir.dx + game->plane.x * ray.camera;
+		ray.ray_dir.dy = game->player.dir.dy + game->plane.y * ray.camera;
+		ray.map_x = (int)game->player.pos.x;
+		ray.map_y = (int)game->player.pos.y;
+		dda(game, &ray);
+		//col = create_vect(game->player, game->pa, ray.perp_dist);
+		//brest(game, game->player.x * 64, game->player.y * 64, col.x * 64, col.y * 64);
 		//draw_column(game, nbr, &ray);
 		nbr++;
 	}
+	game->old_time = game->time;
+	game->time = get_timestamp(game->start);
+	game->frametime = game->time - game->old_time;
 }

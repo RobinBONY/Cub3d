@@ -6,7 +6,7 @@
 /*   By: rbony <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/09 15:34:36 by rbony             #+#    #+#             */
-/*   Updated: 2022/10/05 14:26:23 by rbony            ###   ########lyon.fr   */
+/*   Updated: 2022/10/06 15:27:38 by rbony            ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,8 @@
 # include	<unistd.h>
 # include	<fcntl.h>
 # include	<math.h>
+# include	<sys/time.h>
+# include	<time.h>
 # include	"../mlx/mlx_mac/mlx.h"
 //# include	"../mlx/mlx_linux/mlx.h"
 # include	"../libft/libft.h"
@@ -62,7 +64,7 @@ typedef struct s_texture
 
 typedef struct s_raycasting
 {
-	struct s_vector	dir;
+	struct s_vector	ray_dir;
 	struct s_point	step;
 	struct s_point	side_hit;
 	struct s_vector	delta_dist;
@@ -72,7 +74,14 @@ typedef struct s_raycasting
 	int				map_x;
 	int				map_y;
 	int				side;
+	double			camera;
 }					t_raycasting;
+
+typedef struct s_player
+{
+	struct s_point	pos;
+	struct s_vector	dir;
+}					t_player;
 
 typedef struct s_game
 {
@@ -85,8 +94,12 @@ typedef struct s_game
 	int					**map;
 	int					map_width;
 	int					map_height;
-	struct s_point		player;
-	double				pa;
+	struct s_player		player;
+	struct s_point		plane;
+	struct timeval		start;
+	double				time;
+	double				old_time;
+	double				frametime;
 }				t_game;
 
 // read_map
@@ -113,6 +126,7 @@ int				in_map(t_game *game, int x, int y);
 t_raycasting	dda(t_game *game, double ra, double nbr);
 t_point			create_vect(t_point origin, double radian, double len);
 t_vector		init_vector(t_point start, t_point dest, double camera);
+double			get_timestamp(struct timeval start);
 void			draw_map(t_game *game);
 void			draw_background(t_game *game);
 void			my_mlx_pixel_put(t_game *game, int x, int y, int color);

@@ -6,7 +6,7 @@
 /*   By: rbony <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/09 15:38:45 by rbony             #+#    #+#             */
-/*   Updated: 2022/09/30 11:24:28 by rbony            ###   ########lyon.fr   */
+/*   Updated: 2022/10/06 15:24:33 by rbony            ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,11 +44,9 @@ int	manage_events(int keycode, t_game *game)
 	if (keycode == 65307 || keycode == 53)
 		close_window(game);
 	if (keycode == 13)
-		game->player = check_move(game, create_vect(game->player,
-					game->pa, 0.05));
+		game->player = game->player; //move forward
 	if (keycode == 1)
-		game->player = check_move(game, create_vect(game->player,
-					game->pa, -0.05));
+		game->player = game->player; //move backward
 	if (keycode == 2)
 		game->pa = fixang(game->pa - M_PI / 50);
 	if (keycode == 0)
@@ -62,9 +60,15 @@ void	init(t_game *game)
 {
 	game->win_width = 1920;
 	game->win_height = 1080;
-	game->player.x = 7.5;
-	game->player.y = 3.5;
-	game->pa = M_PI / 2;
+	game->player.pos.x = 7.5;
+	game->player.pos.y = 3.5;
+	game->player.dir.dx = -1;
+	game->player.dir.dy = 0;
+	game->plane.x = 0;
+	game->plane.y = 0.7;
+	game->time = 0;
+	game->old_time = 0;
+	gettimeofday(&game->start, NULL);
 }
 
 int	main(int argc, char **argv)

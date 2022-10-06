@@ -6,7 +6,7 @@
 /*   By: rbony <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/19 14:32:49 by rbony             #+#    #+#             */
-/*   Updated: 2022/10/05 14:27:01 by rbony            ###   ########lyon.fr   */
+/*   Updated: 2022/10/06 15:26:39 by rbony            ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,4 +45,13 @@ t_vector	init_vector(t_point start, t_point dest, double camera)
 	v.dx = (dest.x - start.x) + 0 * camera;
 	v.dy = (dest.y - start.y) + 0.7 * camera;
 	return (v);
+}
+
+double	get_timestamp(struct timeval start)
+{
+	struct timeval	end;
+
+	gettimeofday(&end, NULL);
+	return (((end.tv_sec - start.tv_sec) + 1e-6
+			* (end.tv_usec - start.tv_usec)));
 }
