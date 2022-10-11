@@ -6,7 +6,7 @@
 /*   By: rbony <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/09 15:34:36 by rbony             #+#    #+#             */
-/*   Updated: 2022/10/06 15:27:38 by rbony            ###   ########lyon.fr   */
+/*   Updated: 2022/10/11 14:18:12 by rbony            ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,12 +30,6 @@ typedef struct s_point
 	double	x;
 	double	y;
 }				t_point;
-
-typedef struct s_vector
-{
-	double	dx;
-	double	dy;
-}				t_vector;
 
 typedef struct s_data {
 	void	*img;
@@ -64,23 +58,24 @@ typedef struct s_texture
 
 typedef struct s_raycasting
 {
-	struct s_vector	ray_dir;
-	struct s_point	step;
-	struct s_point	side_hit;
-	struct s_vector	delta_dist;
-	struct s_vector	side_dist;
-	double			dist;
-	double			perp_dist;
+	struct s_point	vertical;
+	struct s_point	ray;
+	double			ra;
+	struct s_point	o;
+	struct s_point	dist;
 	int				map_x;
 	int				map_y;
-	int				side;
-	double			camera;
+	int				dof;
+	int				vcolor;
+	int				hcolor;
+	double			rtan;
 }					t_raycasting;
 
 typedef struct s_player
 {
 	struct s_point	pos;
-	struct s_vector	dir;
+	struct s_point	dir;
+	double			pa;
 }					t_player;
 
 typedef struct s_game
@@ -95,11 +90,12 @@ typedef struct s_game
 	int					map_width;
 	int					map_height;
 	struct s_player		player;
-	struct s_point		plane;
 	struct timeval		start;
 	double				time;
 	double				old_time;
 	double				frametime;
+	double				move_speed;
+	double				rot_speed;
 }				t_game;
 
 // read_map
@@ -123,13 +119,13 @@ int				split_size(char **split);
 double			fixang(double a);
 void			raycasting(t_game *game);
 int				in_map(t_game *game, int x, int y);
-t_raycasting	dda(t_game *game, double ra, double nbr);
-t_point			create_vect(t_point origin, double radian, double len);
-t_vector		init_vector(t_point start, t_point dest, double camera);
+void			dda(t_game *game, t_raycasting *ray);
+t_point			create_vect(t_point origin, float radian, float length);
+t_point			init_vector(t_point start, t_point dest, double camera);
 double			get_timestamp(struct timeval start);
 void			draw_map(t_game *game);
 void			draw_background(t_game *game);
 void			my_mlx_pixel_put(t_game *game, int x, int y, int color);
-void			brest(t_game *env, int sx, int sy, int ex, int ey);
+void			brest(t_game *env, int sx, int sy, int ex, int ey, int color);
 
 #endif

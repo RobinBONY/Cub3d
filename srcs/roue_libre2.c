@@ -6,7 +6,7 @@
 /*   By: rbony <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/15 13:26:50 by rbony             #+#    #+#             */
-/*   Updated: 2022/10/05 14:26:52 by rbony            ###   ########lyon.fr   */
+/*   Updated: 2022/10/11 14:15:23 by rbony            ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@ void	draw_square(t_game *game, int x, int y)
 	}
 }
 
-void	brest(t_game *env, int sx, int sy, int ex, int ey)
+void	brest(t_game *env, int sx, int sy, int ex, int ey, int color)
 {
 	double	i;
 	int		tmpx;
@@ -41,7 +41,7 @@ void	brest(t_game *env, int sx, int sy, int ex, int ey)
 	{
 		tmpx = sx + (ex - sx) * i;
 		tmpy = sy + (ey - sy) * i;
-		my_mlx_pixel_put(env, tmpx, tmpy, 0x00FF00);
+		my_mlx_pixel_put(env, tmpx, tmpy, color);
 		i += 0.0001;
 	}
 }

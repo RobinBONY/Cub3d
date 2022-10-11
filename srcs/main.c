@@ -6,7 +6,7 @@
 /*   By: rbony <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/09 15:38:45 by rbony             #+#    #+#             */
-/*   Updated: 2022/10/06 15:24:33 by rbony            ###   ########lyon.fr   */
+/*   Updated: 2022/10/11 14:40:55 by rbony            ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,11 +32,40 @@ static int	close_window(t_game *game)
 	return (0);
 }
 
-t_point	check_move(t_game *game, t_point new_pos)
+void	move_forward(t_game *game)
 {
-	if (game->map[(int)(new_pos.y)][(int)(new_pos.x)] == 1)
-		return (game->player);
-	return (new_pos);
+	if (game->map[(int)game->player.pos.y / 64][(int)(game->player.pos.x
+		+ game->player.dir.x * 5) / 64] == 0)
+		game->player.pos.x += game->player.dir.x * 5;
+	if (game->map[(int)(game->player.pos.y + game->player.dir.y
+			* 5) / 64][(int)game->player.pos.x / 64])
+		game->player.pos.y += game->player.dir.y * 5;
+}
+
+void	move_backward(t_game *game)
+{
+	if (game->map[(int)game->player.pos.y / 64][(int)(game->player.pos.x
+		- game->player.dir.x * 5) / 64] == 0)
+		game->player.pos.x -= game->player.dir.x * 5;
+	if (game->map[(int)(game->player.pos.y - game->player.dir.y
+			* 5) / 64][(int)game->player.pos.x / 64])
+		game->player.pos.y -= game->player.dir.y * 5;
+}
+
+void	rotate_right(t_game *game)
+{
+	game->player.pa -= (M_PI / 180) * 5;
+	game->player.pa = fixang(game->player.pa);
+	game->player.dir.x = cos(game->player.pa);
+	game->player.dir.y = -sin(game->player.pa);
+}
+
+void	rotate_left(t_game *game)
+{
+	game->player.pa += (M_PI / 180) * 5;
+	game->player.pa = fixang(game->player.pa);
+	game->player.dir.x = cos(game->player.pa);
+	game->player.dir.y = -sin(game->player.pa);
 }
 
 int	manage_events(int keycode, t_game *game)
@@ -44,13 +73,13 @@ int	manage_events(int keycode, t_game *game)
 	if (keycode == 65307 || keycode == 53)
 		close_window(game);
 	if (keycode == 13)
-		game->player = game->player; //move forward
+		move_forward(game);
 	if (keycode == 1)
-		game->player = game->player; //move backward
+		move_backward(game);
 	if (keycode == 2)
-		game->pa = fixang(game->pa - M_PI / 50);
+		rotate_right(game);
 	if (keycode == 0)
-		game->pa = fixang(game->pa + M_PI / 50);
+		rotate_left(game);
 	raycasting(game);
 	mlx_put_image_to_window(game->mlx, game->win, game->img.img, 0, 0);
 	return (0);
@@ -60,14 +89,11 @@ void	init(t_game *game)
 {
 	game->win_width = 1920;
 	game->win_height = 1080;
-	game->player.pos.x = 7.5;
-	game->player.pos.y = 3.5;
-	game->player.dir.dx = -1;
-	game->player.dir.dy = 0;
-	game->plane.x = 0;
-	game->plane.y = 0.7;
-	game->time = 0;
-	game->old_time = 0;
+	game->player.pos.x = 7.5 * 64;
+	game->player.pos.y = 3.5 * 64;
+	game->player.pa = 0;
+	game->player.dir.x = cos(game->player.pa);
+	game->player.dir.y = -sin(game->player.pa);
 	gettimeofday(&game->start, NULL);
 }
 
