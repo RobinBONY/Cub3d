@@ -6,7 +6,7 @@
 /*   By: rbony <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/19 14:32:48 by rbony             #+#    #+#             */
-/*   Updated: 2022/10/11 14:35:26 by rbony            ###   ########lyon.fr   */
+/*   Updated: 2022/10/11 18:57:06 by rbony            ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,7 +96,7 @@ void	raycasting(t_game *game)
 			ray.dist.x = ray.dist.y;
 			ray.hcolor = ray.vcolor;
 		}
-		//dprintf(2, "%f\n", ray.dist.x);
+		ray.dist.x = ray.dist.x * cos(game->player.pa - ray.ra);
 		col = create_vect(game->player.pos, ray.ra, ray.dist.x);
 		brest(game, game->player.pos.x, game->player.pos.y, col.x, col.y, set_color(ray.hcolor));
 		//draw_column(game, nbr, &ray);
