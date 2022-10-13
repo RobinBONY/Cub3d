@@ -6,7 +6,7 @@
 /*   By: rbony <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/19 14:32:47 by rbony             #+#    #+#             */
-/*   Updated: 2022/10/11 11:16:52 by rbony            ###   ########lray->o.yn.fr   */
+/*   Updated: 2022/100/11 11:16:52 by rbony            ###   ########lray->o.yn.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,15 +35,15 @@ void	check_vertical(t_game *game, t_raycasting *ray)
 	{
 		ray->ray.x = game->player.pos.x;
 		ray->ray.y = game->player.pos.y;
-		ray->dof = 10;
+		ray->dof = 100;
 	}//looking up or down. no hit
-	while (ray->dof < 10)
+	while (ray->dof < 100)
 	{
 		ray->map_x = (int)(ray->ray.x) >> 6;
 		ray->map_y = (int)(ray->ray.y) >> 6;
 		if (in_map(game, ray->map_x, ray->map_y) && game->map[ray->map_y][ray->map_x] == 1)
 		{
-			ray->dof = 10;
+			ray->dof = 100;
 			ray->dist.y = cos(ray->ra) * (ray->ray.x - game->player.pos.x) - sin(ray->ra) * (ray->ray.y - game->player.pos.y);
 		}
 		else
@@ -80,15 +80,15 @@ void	check_horizontal(t_game *game, t_raycasting *ray)
 	{
 		ray->ray.x = game->player.pos.x;
 		ray->ray.y = game->player.pos.y;
-		ray->dof = 10;
+		ray->dof = 100;
 	}//looking straight left or right
-	while (ray->dof < 10)
+	while (ray->dof < 100)
 	{
 		ray->map_x = (int)(ray->ray.x) >> 6;
 		ray->map_y = (int)(ray->ray.y) >> 6;
 		if (in_map(game, ray->map_x, ray->map_y) && game->map[ray->map_y][ray->map_x] == 1)
 		{
-			ray->dof = 10;
+			ray->dof = 100;
 			ray->dist.x = cos(ray->ra) * (ray->ray.x - game->player.pos.x) - sin(ray->ra) * (ray->ray.y - game->player.pos.y);
 		}//hit
 		else
@@ -105,9 +105,9 @@ void	dda(t_game *game, t_raycasting *ray)
 	ray->dof = 0;
 	ray->vcolor = 0;
 	ray->hcolor = 0;
-	ray->dist.y = 100000;
+	ray->dist.y = 1000000;
 	check_vertical(game, ray);
 	ray->dof = 0;
-	ray->dist.x = 100000;
+	ray->dist.x = 1000000;
 	check_horizontal(game, ray);
 }

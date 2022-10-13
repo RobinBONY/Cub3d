@@ -6,7 +6,7 @@
 /*   By: rbony <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/09 15:38:45 by rbony             #+#    #+#             */
-/*   Updated: 2022/10/11 18:49:57 by rbony            ###   ########lyon.fr   */
+/*   Updated: 2022/10/13 10:35:05 by rbony            ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,15 +66,16 @@ void	rotate_left(t_game *game)
 
 int	manage_events(int keycode, t_game *game)
 {
+	dprintf(2, "%d\n", keycode);
 	if (keycode == 65307 || keycode == 53)
 		close_window(game);
-	if (keycode == 13)
+	if (keycode == 13 || keycode == 122)
 		move_forward(game);
-	if (keycode == 1)
+	if (keycode == 1  || keycode == 115)
 		move_backward(game);
-	if (keycode == 2)
+	if (keycode == 2  || keycode == 100)
 		rotate_right(game);
-	if (keycode == 0)
+	if (keycode == 0  || keycode == 113)
 		rotate_left(game);
 	raycasting(game);
 	mlx_put_image_to_window(game->mlx, game->win, game->img.img, 0, 0);
@@ -85,8 +86,8 @@ void	init(t_game *game)
 {
 	game->win_width = 1920;
 	game->win_height = 1080;
-	game->player.pos.x = 7.5 * 64;
-	game->player.pos.y = 3.5 * 64;
+	game->player.pos.x = 3.5 * 64;
+	game->player.pos.y = 10.5 * 64;
 	game->player.pa = 0;
 	game->player.dir.x = cos(game->player.pa);
 	game->player.dir.y = -sin(game->player.pa);

@@ -6,7 +6,7 @@
 /*   By: rbony <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/19 14:32:48 by rbony             #+#    #+#             */
-/*   Updated: 2022/10/11 18:57:06 by rbony            ###   ########lyon.fr   */
+/*   Updated: 2022/10/13 10:22:30 by rbony            ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,7 @@ void	draw_column(t_game *game, int x, t_raycasting *ray)
 	int	len;
 	int	tmpy;
 
-	len = (int)(game->win_height / ray->dist.x);
+	len = (int)(64 * game->win_height / ray->dist.x);
 	if (len > game->win_height)
 		len = game->win_height;
 	y = game->win_height / 2 - len / 2;
@@ -80,10 +80,10 @@ void	raycasting(t_game *game)
 {
 	int				nbr;
 	t_raycasting	ray;
-	t_point			col;
+	//t_point			col;
 
 	draw_background(game);
-	draw_map(game);
+	//draw_map(game);
 	nbr = 0;
 	ray.ra = game->player.pa + ((M_PI / 180) * 35);
 	while (nbr < game->win_width)
@@ -96,10 +96,10 @@ void	raycasting(t_game *game)
 			ray.dist.x = ray.dist.y;
 			ray.hcolor = ray.vcolor;
 		}
-		ray.dist.x = ray.dist.x * cos(game->player.pa - ray.ra);
-		col = create_vect(game->player.pos, ray.ra, ray.dist.x);
-		brest(game, game->player.pos.x, game->player.pos.y, col.x, col.y, set_color(ray.hcolor));
-		//draw_column(game, nbr, &ray);
+		ray.dist.x = ray.dist.x * cos(ray.ra - game->player.pa);
+		//col = create_vect(game->player.pos, ray.ra, ray.dist.x);
+		//brest(game, game->player.pos.x, game->player.pos.y, col.x, col.y, set_color(ray.hcolor));
+		draw_column(game, nbr, &ray);
 		nbr++;
 		ray.ra = fixang(ray.ra - (((M_PI / 180) * 70) / game->win_width));
 	}
