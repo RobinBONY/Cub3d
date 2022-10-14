@@ -6,7 +6,7 @@
 /*   By: rbony <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/09 15:38:45 by rbony             #+#    #+#             */
-/*   Updated: 2022/10/11 18:49:57 by rbony            ###   ########lyon.fr   */
+/*   Updated: 2022/10/12 12:48:49 by rbony            ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,17 +34,21 @@ static int	close_window(t_game *game)
 
 void	move_forward(t_game *game)
 {
-	if (game->map[(int)game->player.pos.y / 64][(int)(game->player.pos.x + game->player.dir.x * 5) / 64] == 0)
+	if (game->map[(int)game->player.pos.y / 64][(int)(game->player.pos.x
+		+ game->player.dir.x * 5) / 64] == 0)
 		game->player.pos.x += game->player.dir.x * 5;
-	if (game->map[(int)(game->player.pos.y + game->player.dir.y * 5) / 64][(int)game->player.pos.x / 64] == 0)
+	if (game->map[(int)(game->player.pos.y + game->player.dir.y
+			* 5) / 64][(int)game->player.pos.x / 64] == 0)
 		game->player.pos.y += game->player.dir.y * 5;
 }
 
 void	move_backward(t_game *game)
 {
-	if (game->map[(int)game->player.pos.y / 64][(int)(game->player.pos.x - game->player.dir.x * 5) / 64] == 0)
+	if (game->map[(int)game->player.pos.y / 64][(int)(game->player.pos.x
+		- game->player.dir.x * 5) / 64] == 0)
 		game->player.pos.x -= game->player.dir.x * 5;
-	if (game->map[(int)(game->player.pos.y - game->player.dir.y * 5) / 64][(int)game->player.pos.x / 64] == 0)
+	if (game->map[(int)(game->player.pos.y - game->player.dir.y
+			* 5) / 64][(int)game->player.pos.x / 64] == 0)
 		game->player.pos.y -= game->player.dir.y * 5;
 }
 
@@ -87,7 +91,7 @@ void	init(t_game *game)
 	game->win_height = 1080;
 	game->player.pos.x = 7.5 * 64;
 	game->player.pos.y = 3.5 * 64;
-	game->player.pa = 0;
+	game->player.pa = M_PI / 2;
 	game->player.dir.x = cos(game->player.pa);
 	game->player.dir.y = -sin(game->player.pa);
 	gettimeofday(&game->start, NULL);
