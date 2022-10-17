@@ -46,15 +46,15 @@ int	split_size(char **split)
 	return (i);
 }
 
-int	check_texture(int *texture_fd, char **filename)
+int	check_texture(t_game *game, t_texture *texture, char **filename)
 {
 	int	file_exists;
 
 	file_exists = access(filename[1], R_OK);
 	if (check_ext(filename[1], ".xpm") && file_exists == 0)
 	{
-		*texture_fd = open(filename[1], O_RDONLY);
-		if (*texture_fd < 0)
+		store_textures_on_image(game, texture, filename[1]);
+		if (!texture)
 			return (error_2(filename[0], READING_FILE));
 		return (0);
 	}
@@ -90,17 +90,17 @@ int	check_color(t_color *color, char **filename)
 int	find_keyword(t_game *game, char **line)
 {
 	if (ft_strcmp(line[0], "NO") == 0)
-		return (check_texture(&game->textures.n_texture, line));
+		return (check_texture(game, &game->map_info.n_texture, line));
 	if (ft_strcmp(line[0], "SO") == 0)
-		return (check_texture(&game->textures.s_texture, line));
+		return (check_texture(game, &game->map_info.s_texture, line));
 	if (ft_strcmp(line[0], "EA") == 0)
-		return (check_texture(&game->textures.e_texture, line));
+		return (check_texture(game, &game->map_info.e_texture, line));
 	if (ft_strcmp(line[0], "WE") == 0)
-		return (check_texture(&game->textures.w_texture, line));
+		return (check_texture(game, &game->map_info.w_texture, line));
 	if (ft_strcmp(line[0], "F") == 0)
-		return (check_color(&game->textures.f_color, line));
+		return (check_color(&game->map_info.f_color, line));
 	if (ft_strcmp(line[0], "C") == 0)
-		return (check_color(&game->textures.c_color, line));
+		return (check_color(&game->map_info.c_color, line));
 	return (error_1(INVALID_FORMAT));
 }
 

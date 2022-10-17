@@ -29,7 +29,7 @@ void	check_vertical(t_game *game, t_raycasting *ray)
 		ray->ray.y = (game->player.pos.x - ray->ray.x) * ray->rtan + game->player.pos.y;
 		ray->o.x = -64;
 		ray->o.y = -ray->o.x * ray->rtan;
-		ray->vcolor = 2;
+		ray->vcolor = 3;
 	}//looking right
 	else
 	{
@@ -66,7 +66,7 @@ void	check_horizontal(t_game *game, t_raycasting *ray)
 		ray->ray.x = (game->player.pos.y - ray->ray.y) * ray->rtan + game->player.pos.x;
 		ray->o.y = -64;
 		ray->o.x = -ray->o.y * ray->rtan;
-		ray->hcolor = 3;
+		ray->hcolor = 2;
 	}//looking up
 	else if (sin(ray->ra) < -0.001)
 	{

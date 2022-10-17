@@ -6,7 +6,7 @@
 /*   By: rbony <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/19 14:32:48 by rbony             #+#    #+#             */
-/*   Updated: 2022/10/13 10:22:30 by rbony            ###   ########lyon.fr   */
+/*   Updated: 2022/10/17 14:54:15 by rbony            ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,16 +23,16 @@ void	my_mlx_pixel_put(t_game *game, int x, int y, int color)
 	*(unsigned int *)dst = color;
 }
 
-int	set_color(int side)
+t_texture	set_texture(t_game *game, t_raycasting *ray)
 {
-	if (side == 1)
-		return (0xFF0000);
-	else if (side == 2)
-		return (0x00FF00);
-	else if (side == 3)
-		return (0x0000FF);
+	if (ray->hcolor == 1)
+		return (game->map_info.w_texture);
+	else if (ray->hcolor == 2)
+		return (game->map_info.n_texture);
+	else if (ray->hcolor == 3)
+		return (game->map_info.e_texture);
 	else
-		return (0xFFFF00);
+		return (game->map_info.s_texture);
 }
 
 void	draw_column(t_game *game, int x, t_raycasting *ray)
@@ -40,17 +40,22 @@ void	draw_column(t_game *game, int x, t_raycasting *ray)
 	int	i;
 	int	y;
 	int	len;
-	int	tmpy;
 
-	len = (int)(64 * game->win_height / ray->dist.x);
-	if (len > game->win_height)
-		len = game->win_height;
-	y = game->win_height / 2 - len / 2;
+	len = (int)(128 * game->win_height / ray->dist.x);
+	ray->rtexture = set_texture(game, ray);
+	if (ray->hcolor % 2 == 0)
+		ray->tx = ((ray->col.x / 64.0f) - (int)(ray->col.x / 64.0f)) * ray->rtexture.width;
+	else
+		ray->tx = ((ray->col.y / 64.0f) - (int)(ray->col.y / 64.0f)) * ray->rtexture.width;
+	ray->ty = 0;
+	ray->ratio = (double)ray->rtexture.height / (double)len;
 	i = 0;
-	while (y + i < y + len)
+	y = game->win_height / 2 - len / 2;
+	while (i < len - 1)
 	{
-		tmpy = y + i;
-		my_mlx_pixel_put(game, x, tmpy, set_color(ray->hcolor));
+		ray->ty += ray->ratio;
+		my_mlx_pixel_put(game, x, y + i,
+			get_text_pixel(&ray->rtexture, ray->tx, ray->ty));
 		i++;
 	}
 }
@@ -67,9 +72,9 @@ void	draw_background(t_game *game)
 		while (j < game->win_width)
 		{
 			if (i < game->win_height / 2)
-				my_mlx_pixel_put(game, j, i, 0xC0DFEF);
+				my_mlx_pixel_put(game, j, i, 0x22222F);
 			else
-				my_mlx_pixel_put(game, j, i, 0x333333);
+				my_mlx_pixel_put(game, j, i, 0x000000);
 			j++;
 		}
 		i++;
@@ -80,12 +85,10 @@ void	raycasting(t_game *game)
 {
 	int				nbr;
 	t_raycasting	ray;
-	//t_point			col;
 
 	draw_background(game);
-	//draw_map(game);
 	nbr = 0;
-	ray.ra = game->player.pa + ((M_PI / 180) * 35);
+	ray.ra = fixang(game->player.pa + ((M_PI / 180) * 25));
 	while (nbr < game->win_width)
 	{
 		dda(game, &ray);
@@ -96,12 +99,12 @@ void	raycasting(t_game *game)
 			ray.dist.x = ray.dist.y;
 			ray.hcolor = ray.vcolor;
 		}
+		ray.col = create_vect(game->player.pos, ray.ra, ray.dist.x);
 		ray.dist.x = ray.dist.x * cos(ray.ra - game->player.pa);
-		//col = create_vect(game->player.pos, ray.ra, ray.dist.x);
-		//brest(game, game->player.pos.x, game->player.pos.y, col.x, col.y, set_color(ray.hcolor));
 		draw_column(game, nbr, &ray);
+		//brest(game, game->player.pos.x, game->player.pos.y, col.x, col.y, set_color(ray.hcolor));
 		nbr++;
-		ray.ra = fixang(ray.ra - (((M_PI / 180) * 70) / game->win_width));
+		ray.ra = fixang(ray.ra - ((M_PI / 180) * 50) / game->win_width);
 	}
 }
 // distV = ray.dist.y

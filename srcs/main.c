@@ -6,7 +6,7 @@
 /*   By: rbony <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/09 15:38:45 by rbony             #+#    #+#             */
-/*   Updated: 2022/10/13 10:35:05 by rbony            ###   ########lyon.fr   */
+/*   Updated: 2022/10/17 10:42:25 by rbony            ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,10 +23,6 @@ static int	close_window(t_game *game)
 		i++;
 	}
 	free(game->map);
-	close(game->textures.n_texture);
-	close(game->textures.s_texture);
-	close(game->textures.e_texture);
-	close(game->textures.w_texture);
 	mlx_destroy_window(game->mlx, game->win);
 	exit(0);
 	return (0);
@@ -34,17 +30,21 @@ static int	close_window(t_game *game)
 
 void	move_forward(t_game *game)
 {
-	if (game->map[(int)game->player.pos.y / 64][(int)(game->player.pos.x + game->player.dir.x * 5) / 64] == 0)
+	if (game->map[(int)game->player.pos.y / 64][(int)(game->player.pos.x
+		+ game->player.dir.x * 5) / 64] == 0)
 		game->player.pos.x += game->player.dir.x * 5;
-	if (game->map[(int)(game->player.pos.y + game->player.dir.y * 5) / 64][(int)game->player.pos.x / 64] == 0)
+	if (game->map[(int)(game->player.pos.y + game->player.dir.y
+			* 5) / 64][(int)game->player.pos.x / 64] == 0)
 		game->player.pos.y += game->player.dir.y * 5;
 }
 
 void	move_backward(t_game *game)
 {
-	if (game->map[(int)game->player.pos.y / 64][(int)(game->player.pos.x - game->player.dir.x * 5) / 64] == 0)
+	if (game->map[(int)game->player.pos.y / 64][(int)(game->player.pos.x
+		- game->player.dir.x * 5) / 64] == 0)
 		game->player.pos.x -= game->player.dir.x * 5;
-	if (game->map[(int)(game->player.pos.y - game->player.dir.y * 5) / 64][(int)game->player.pos.x / 64] == 0)
+	if (game->map[(int)(game->player.pos.y - game->player.dir.y
+			* 5) / 64][(int)game->player.pos.x / 64] == 0)
 		game->player.pos.y -= game->player.dir.y * 5;
 }
 
@@ -66,7 +66,6 @@ void	rotate_left(t_game *game)
 
 int	manage_events(int keycode, t_game *game)
 {
-	dprintf(2, "%d\n", keycode);
 	if (keycode == 65307 || keycode == 53)
 		close_window(game);
 	if (keycode == 13 || keycode == 122)
@@ -84,8 +83,8 @@ int	manage_events(int keycode, t_game *game)
 
 void	init(t_game *game)
 {
-	game->win_width = 1920;
-	game->win_height = 1080;
+	game->win_width = 2048;
+	game->win_height = 1024;
 	game->player.pos.x = 3.5 * 64;
 	game->player.pos.y = 10.5 * 64;
 	game->player.pa = 0;
@@ -98,13 +97,15 @@ int	main(int argc, char **argv)
 {
 	t_game	game;
 
-	if (argc == 2 && !read_map(&game, argv[1]))
+	if (argc == 2)
 	{
 		init(&game);
 		game.mlx = mlx_init();
+		if (read_map(&game, argv[1]))
+			return (0);
 		game.win = mlx_new_window(game.mlx, game.win_width,
 				game.win_height, "Cub3D");
-		game.img.img = mlx_new_image(game.mlx, 1920, 1080);
+		game.img.img = mlx_new_image(game.mlx, 2048, 1024);
 		game.img.addr = mlx_get_data_addr(game.img.img,
 				&game.img.bits_per_pixel, &game.img.line_length,
 				&game.img.endian);
