@@ -6,7 +6,7 @@
 /*   By: rbony <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/09 15:34:36 by rbony             #+#    #+#             */
-/*   Updated: 2022/10/11 18:56:14 by rbony            ###   ########lyon.fr   */
+/*   Updated: 2022/10/17 14:54:27 by rbony            ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,27 +48,44 @@ typedef struct s_color
 
 typedef struct s_texture
 {
-	int					n_texture;
-	int					s_texture;
-	int					e_texture;
-	int					w_texture;
+	void	*img;
+	int		bits_per_pixel;
+	int		endian;
+	char	*texture_path;
+	int		width;
+	int		height;
+	int		line_length;
+	void	*text_address;
+}				t_texture;
+
+typedef struct s_map_info
+{
+	t_texture			n_texture;
+	t_texture			s_texture;
+	t_texture			e_texture;
+	t_texture			w_texture;
 	struct s_color		f_color;
 	struct s_color		c_color;
-}				t_texture;
+}				t_map_info;
 
 typedef struct s_raycasting
 {
-	struct s_point	vertical;
-	struct s_point	ray;
-	double			ra;
-	struct s_point	o;
-	struct s_point	dist;
-	int				map_x;
-	int				map_y;
-	int				dof;
-	int				vcolor;
-	int				hcolor;
-	double			rtan;
+	struct s_point		vertical;
+	struct s_point		ray;
+	double				ra;
+	struct s_point		o;
+	struct s_point		dist;
+	int					map_x;
+	int					map_y;
+	int					dof;
+	int					vcolor;
+	int					hcolor;
+	double				rtan;
+	double				tx;
+	double				ty;
+	double				ratio;
+	struct s_texture	rtexture;
+	struct s_point		col;
 }					t_raycasting;
 
 typedef struct s_player
@@ -89,6 +106,7 @@ typedef struct s_game
 	int					**map;
 	int					map_width;
 	int					map_height;
+	struct s_map_info	map_info;
 	struct s_player		player;
 	struct timeval		start;
 	double				time;
@@ -96,6 +114,10 @@ typedef struct s_game
 	double				frametime;
 	double				move_speed;
 	double				rot_speed;
+	int					draw_start;
+	int					draw_end;
+	int					line_length;
+	int					line_height;
 }				t_game;
 
 // read_map
@@ -126,6 +148,8 @@ double			get_timestamp(struct timeval start);
 void			draw_map(t_game *game);
 void			draw_background(t_game *game);
 void			my_mlx_pixel_put(t_game *game, int x, int y, int color);
-void			brest(t_game *env, int sx, int sy, int ex, int ey, int color);
+//void			//brest(t_game *env, int sx, int sy, int ex, int ey, int color);
+int				store_textures_on_image(t_game *game, t_texture *texture, char *texture_path);
+int				get_text_pixel(t_texture *texture, int x, int y);
 
 #endif

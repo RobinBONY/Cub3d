@@ -30,12 +30,8 @@ void	print_data(t_game *game)
 	int	i;
 	int	j;
 
-	printf("n texture : %d\n", game->textures.n_texture);
-	printf("s texture : %d\n", game->textures.s_texture);
-	printf("e texture : %d\n", game->textures.e_texture);
-	printf("w texture : %d\n", game->textures.w_texture);
-	printf("f color : %d,%d,%d\n", game->textures.f_color.r, game->textures.f_color.g, game->textures.f_color.b);
-	printf("c color : %d,%d,%d\n", game->textures.c_color.r, game->textures.c_color.g, game->textures.c_color.b);
+	printf("f color : %d,%d,%d\n", game->map_info.f_color.r, game->map_info.f_color.g, game->map_info.f_color.b);
+	printf("c color : %d,%d,%d\n", game->map_info.c_color.r, game->map_info.c_color.g, game->map_info.c_color.b);
 	i = 0;
 	while (i < game->map_height)
 	{

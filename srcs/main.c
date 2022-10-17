@@ -6,7 +6,7 @@
 /*   By: rbony <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/09 15:38:45 by rbony             #+#    #+#             */
-/*   Updated: 2022/10/12 12:48:49 by rbony            ###   ########lyon.fr   */
+/*   Updated: 2022/10/17 10:42:25 by rbony            ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,10 +23,6 @@ static int	close_window(t_game *game)
 		i++;
 	}
 	free(game->map);
-	close(game->textures.n_texture);
-	close(game->textures.s_texture);
-	close(game->textures.e_texture);
-	close(game->textures.w_texture);
 	mlx_destroy_window(game->mlx, game->win);
 	exit(0);
 	return (0);
@@ -72,13 +68,13 @@ int	manage_events(int keycode, t_game *game)
 {
 	if (keycode == 65307 || keycode == 53)
 		close_window(game);
-	if (keycode == 13)
+	if (keycode == 13 || keycode == 122)
 		move_forward(game);
-	if (keycode == 1)
+	if (keycode == 1  || keycode == 115)
 		move_backward(game);
-	if (keycode == 2)
+	if (keycode == 2  || keycode == 100)
 		rotate_right(game);
-	if (keycode == 0)
+	if (keycode == 0  || keycode == 113)
 		rotate_left(game);
 	raycasting(game);
 	mlx_put_image_to_window(game->mlx, game->win, game->img.img, 0, 0);
@@ -87,11 +83,11 @@ int	manage_events(int keycode, t_game *game)
 
 void	init(t_game *game)
 {
-	game->win_width = 1920;
-	game->win_height = 1080;
-	game->player.pos.x = 7.5 * 64;
-	game->player.pos.y = 3.5 * 64;
-	game->player.pa = M_PI / 2;
+	game->win_width = 2048;
+	game->win_height = 1024;
+	game->player.pos.x = 3.5 * 64;
+	game->player.pos.y = 10.5 * 64;
+	game->player.pa = 0;
 	game->player.dir.x = cos(game->player.pa);
 	game->player.dir.y = -sin(game->player.pa);
 	gettimeofday(&game->start, NULL);
@@ -101,13 +97,15 @@ int	main(int argc, char **argv)
 {
 	t_game	game;
 
-	if (argc == 2 && !read_map(&game, argv[1]))
+	if (argc == 2)
 	{
 		init(&game);
 		game.mlx = mlx_init();
+		if (read_map(&game, argv[1]))
+			return (0);
 		game.win = mlx_new_window(game.mlx, game.win_width,
 				game.win_height, "Cub3D");
-		game.img.img = mlx_new_image(game.mlx, 1920, 1080);
+		game.img.img = mlx_new_image(game.mlx, 2048, 1024);
 		game.img.addr = mlx_get_data_addr(game.img.img,
 				&game.img.bits_per_pixel, &game.img.line_length,
 				&game.img.endian);

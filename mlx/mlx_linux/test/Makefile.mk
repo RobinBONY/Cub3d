@@ -22,7 +22,7 @@ else ifeq ($(UNAME), FreeBSD)
 else
 	#Linux and others...
 	CC	= gcc
-	LFLAGS += -lbsd
+	#LFLAGS += -lbsd
 endif
 
 all: $(NAME)

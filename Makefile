@@ -6,7 +6,7 @@
 #    By: rbony <marvin@42.fr>                       +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/01/28 08:34:54 by rbony             #+#    #+#              #
-#    Updated: 2022/09/30 10:01:56 by rbony            ###   ########lyon.fr    #
+#    Updated: 2022/10/14 14:21:08 by rbony            ###   ########lyon.fr    #
 #                                                                              #
 # **************************************************************************** #
 
@@ -20,7 +20,8 @@ SRCS = 	srcs/main.c	\
 		srcs/raycasting/raycasting.c \
 		srcs/raycasting/raycasting_utils.c \
 		srcs/raycasting/dda.c \
-		srcs/roue_libre2.c
+		srcs/roue_libre2.c	\
+		srcs/texture.c
 
 OBJS = ${SRCS:.c=.o}
 
