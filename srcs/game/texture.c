@@ -6,7 +6,7 @@
 /*   By: alakhdar <<marvin@42.fr>>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/14 10:30:06 by rbony             #+#    #+#             */
-/*   Updated: 2022/10/17 15:07:47 by alakhdar         ###   ########lyon.fr   */
+/*   Updated: 2022/10/18 14:42:39 by alakhdar         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,8 @@ int	get_text_pixel(t_texture *texture, int x, int y)
 	return (color);
 }
 
-int	store_textures_on_image(t_game *game, t_texture *texture, char *texture_path)
+int	store_textures_on_image(t_game *game, t_texture *texture,
+	char *texture_path)
 {
 	texture->img = mlx_xpm_file_to_image(game->mlx, texture_path,
 			&texture->width, &texture->height);

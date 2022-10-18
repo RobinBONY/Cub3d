@@ -12,7 +12,7 @@
 
 #include "../../headers/cub3d.h"
 
-static int	ft_isspace(int c)
+int	ft_isspace(int c)
 {
 	if (c && (c == 32 || c == 9
 			|| c == 10 || c == 11
@@ -21,29 +21,6 @@ static int	ft_isspace(int c)
 		return (1);
 	}
 	return (0);
-}
-
-/*Debug functions*/
-
-void	print_data(t_game *game)
-{
-	int	i;
-	int	j;
-
-	printf("f color : %d,%d,%d\n", game->map_info.f_color.r, game->map_info.f_color.g, game->map_info.f_color.b);
-	printf("c color : %d,%d,%d\n", game->map_info.c_color.r, game->map_info.c_color.g, game->map_info.c_color.b);
-	i = 0;
-	while (i < game->map_height)
-	{
-		j = 0;
-		while (j < game->map_width)
-		{
-			printf("%d\t", game->map[i][j]);
-			j++;
-		}
-		printf("%c", '\n');
-		i++;
-	}
 }
 
 void	fill_int_map(t_game *game, t_list *list)
@@ -89,6 +66,9 @@ int	check_closed_sides(char *str)
 	int		i;
 
 	i = 0;
+	if (str[i] != '1')
+		if (!ft_isspace(str[i]))
+			return (1);
 	while (str[i] && str[i + 1])
 	{
 		if (ft_isspace(str[i]) && str[i + 1] == '0')
@@ -97,5 +77,8 @@ int	check_closed_sides(char *str)
 			return (1);
 		i++;
 	}
+	if (str[i] != '1')
+		if (!ft_isspace(str[i]))
+			return (1);
 	return (0);
 }

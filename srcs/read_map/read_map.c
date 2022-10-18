@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   read_map.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rbony <marvin@42.fr>                       +#+  +:+       +#+        */
+/*   By: alakhdar <<marvin@42.fr>>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/10 17:08:31 by rbony             #+#    #+#             */
-/*   Updated: 2022/09/07 12:33:03 by rbony            ###   ########lyon.fr   */
+/*   Updated: 2022/10/18 15:04:28 by alakhdar         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,7 +66,11 @@ static int	parse_file(t_game *game, char *mapname)
 {
 	t_list	*head;
 	t_list	*tmp;
+	int		i;
+	int		j;
 
+	i = 0;
+	j = 0;
 	head = fill_map_list(mapname);
 	if (!head)
 		return (error_1(READING_FILE));
@@ -75,8 +79,9 @@ static int	parse_file(t_game *game, char *mapname)
 		return (1);
 	if (parse_map(game, tmp))
 		return (error_1(INVALID_MAP));
+	if (check_valid_cells(game->map, game, i, j))
+		return (error_1(INVALID_MAP));
 	ft_lstclear(&head);
-	print_data(game);
 	return (0);
 }
 

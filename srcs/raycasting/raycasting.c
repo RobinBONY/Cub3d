@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   raycasting.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rbony <marvin@42.fr>                       +#+  +:+       +#+        */
+/*   By: alakhdar <<marvin@42.fr>>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/19 14:32:48 by rbony             #+#    #+#             */
-/*   Updated: 2022/10/17 14:54:15 by rbony            ###   ########lyon.fr   */
+/*   Updated: 2022/10/18 14:46:40 by alakhdar         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,9 +44,11 @@ void	draw_column(t_game *game, int x, t_raycasting *ray)
 	len = (int)(128 * game->win_height / ray->dist.x);
 	ray->rtexture = set_texture(game, ray);
 	if (ray->hcolor % 2 == 0)
-		ray->tx = ((ray->col.x / 64.0f) - (int)(ray->col.x / 64.0f)) * ray->rtexture.width;
+		ray->tx = ((ray->col.x / 64.0f) - (int)(ray->col.x / 64.0f))
+			* ray->rtexture.width;
 	else
-		ray->tx = ((ray->col.y / 64.0f) - (int)(ray->col.y / 64.0f)) * ray->rtexture.width;
+		ray->tx = ((ray->col.y / 64.0f) - (int)(ray->col.y / 64.0f))
+			* ray->rtexture.width;
 	ray->ty = 0;
 	ray->ratio = (double)ray->rtexture.height / (double)len;
 	i = 0;
@@ -74,7 +76,7 @@ void	draw_background(t_game *game)
 			if (i < game->win_height / 2)
 				my_mlx_pixel_put(game, j, i, 0x22222F);
 			else
-				my_mlx_pixel_put(game, j, i, 0x000000);
+				my_mlx_pixel_put(game, j, i, 0x4a0904);
 			j++;
 		}
 		i++;
@@ -102,10 +104,7 @@ void	raycasting(t_game *game)
 		ray.col = create_vect(game->player.pos, ray.ra, ray.dist.x);
 		ray.dist.x = ray.dist.x * cos(ray.ra - game->player.pa);
 		draw_column(game, nbr, &ray);
-		//brest(game, game->player.pos.x, game->player.pos.y, col.x, col.y, set_color(ray.hcolor));
 		nbr++;
 		ray.ra = fixang(ray.ra - ((M_PI / 180) * 50) / game->win_width);
 	}
 }
-// distV = ray.dist.y
-// distH = ray.dist.x

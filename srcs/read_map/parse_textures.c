@@ -12,40 +12,6 @@
 
 #include "../../headers/cub3d.h"
 
-int	error_1(char *str)
-{
-	printf("%s %s\n", ERROR, str);
-	return (1);
-}
-
-int	error_2(char *str1, char *str2)
-{
-	printf("%s %s %s\n", ERROR, str1, str2);
-	return (1);
-}
-
-void	free_split(char **split)
-{
-	int	i;
-
-	i = -1;
-	while (split[++i])
-		free(split[i]);
-	free(split);
-}
-
-int	split_size(char **split)
-{
-	int	i;
-
-	i = 0;
-	if (!split)
-		return (0);
-	while (split[i])
-		i++;
-	return (i);
-}
-
 int	check_texture(t_game *game, t_texture *texture, char **filename)
 {
 	int	file_exists;
