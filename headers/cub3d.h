@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cub3d.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rbony <marvin@42.fr>                       +#+  +:+       +#+        */
+/*   By: alakhdar <<marvin@42.fr>>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/09 15:34:36 by rbony             #+#    #+#             */
-/*   Updated: 2022/10/17 14:54:27 by rbony            ###   ########lyon.fr   */
+/*   Updated: 2022/10/18 15:03:36 by alakhdar         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,6 @@
 # include	<sys/time.h>
 # include	<time.h>
 # include	"../mlx/mlx_mac/mlx.h"
-//# include	"../mlx/mlx_linux/mlx.h"
 # include	"../libft/libft.h"
 # include	"errors.h"
 
@@ -129,7 +128,6 @@ int				check_closed_height(char *str);
 int				check_closed_width(char *str);
 int				create_int_map(t_game *game, t_list *list);
 int				check_map_layout(t_list *head, t_game *game);
-void			print_data(t_game *game);
 void			fill_int_map(t_game *game, t_list *list);
 int				check_closed_width(char *str);
 int				check_closed_sides(char *str);
@@ -148,8 +146,25 @@ double			get_timestamp(struct timeval start);
 void			draw_map(t_game *game);
 void			draw_background(t_game *game);
 void			my_mlx_pixel_put(t_game *game, int x, int y, int color);
-//void			//brest(t_game *env, int sx, int sy, int ex, int ey, int color);
-int				store_textures_on_image(t_game *game, t_texture *texture, char *texture_path);
+int				store_textures_on_image(t_game *game, t_texture *texture,
+					char *texture_path);
 int				get_text_pixel(t_texture *texture, int x, int y);
+int				check_valid_cells(int **map, t_game *game, int i, int j);
+int				ft_isspace(int c);
+int				error_1(char *str);
+int				error_2(char *str1, char *str2);
+void			free_split(char **split);
+int				split_size(char **split);
+void			move_forward(t_game *game);
+void			move_backward(t_game *game);
+void			rotate_right(t_game *game);
+void			rotate_left(t_game *game);
+void			vert_facing_left(t_game *game, t_raycasting *ray);
+void			vert_facing_right(t_game *game, t_raycasting *ray);
+void			vert_up_down(t_game *game, t_raycasting *ray);
+void			get_disty(t_game *game, t_raycasting *ray);
+void			hori_facing_up(t_game *game, t_raycasting *ray);
+void			hori_facing_down(t_game *game, t_raycasting *ray);
+void			vert_facing_rl(t_game *game, t_raycasting *ray);
 
 #endif

@@ -6,7 +6,7 @@
 /*   By: rbony <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/09 15:38:45 by rbony             #+#    #+#             */
-/*   Updated: 2022/10/17 10:42:25 by rbony            ###   ########lyon.fr   */
+/*   Updated: 2022/10/18 15:44:30 by rbony            ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,53 +28,17 @@ static int	close_window(t_game *game)
 	return (0);
 }
 
-void	move_forward(t_game *game)
-{
-	if (game->map[(int)game->player.pos.y / 64][(int)(game->player.pos.x
-		+ game->player.dir.x * 5) / 64] == 0)
-		game->player.pos.x += game->player.dir.x * 5;
-	if (game->map[(int)(game->player.pos.y + game->player.dir.y
-			* 5) / 64][(int)game->player.pos.x / 64] == 0)
-		game->player.pos.y += game->player.dir.y * 5;
-}
-
-void	move_backward(t_game *game)
-{
-	if (game->map[(int)game->player.pos.y / 64][(int)(game->player.pos.x
-		- game->player.dir.x * 5) / 64] == 0)
-		game->player.pos.x -= game->player.dir.x * 5;
-	if (game->map[(int)(game->player.pos.y - game->player.dir.y
-			* 5) / 64][(int)game->player.pos.x / 64] == 0)
-		game->player.pos.y -= game->player.dir.y * 5;
-}
-
-void	rotate_right(t_game *game)
-{
-	game->player.pa -= (M_PI / 180) * 5;
-	game->player.pa = fixang(game->player.pa);
-	game->player.dir.x = cos(game->player.pa);
-	game->player.dir.y = -sin(game->player.pa);
-}
-
-void	rotate_left(t_game *game)
-{
-	game->player.pa += (M_PI / 180) * 5;
-	game->player.pa = fixang(game->player.pa);
-	game->player.dir.x = cos(game->player.pa);
-	game->player.dir.y = -sin(game->player.pa);
-}
-
 int	manage_events(int keycode, t_game *game)
 {
 	if (keycode == 65307 || keycode == 53)
 		close_window(game);
 	if (keycode == 13 || keycode == 122)
 		move_forward(game);
-	if (keycode == 1  || keycode == 115)
+	if (keycode == 1 || keycode == 115)
 		move_backward(game);
-	if (keycode == 2  || keycode == 100)
+	if (keycode == 2 || keycode == 100)
 		rotate_right(game);
-	if (keycode == 0  || keycode == 113)
+	if (keycode == 0 || keycode == 113)
 		rotate_left(game);
 	raycasting(game);
 	mlx_put_image_to_window(game->mlx, game->win, game->img.img, 0, 0);
@@ -85,11 +49,8 @@ void	init(t_game *game)
 {
 	game->win_width = 2048;
 	game->win_height = 1024;
-	game->player.pos.x = 3.5 * 64;
-	game->player.pos.y = 10.5 * 64;
-	game->player.pa = 0;
-	game->player.dir.x = cos(game->player.pa);
-	game->player.dir.y = -sin(game->player.pa);
+	game->player.pos.x = 0;
+	game->player.pos.y = 0;
 	gettimeofday(&game->start, NULL);
 }
 

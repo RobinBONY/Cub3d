@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: rbony <marvin@42.fr>                       +#+  +:+       +#+         #
+#    By: alakhdar <<marvin@42.fr>>                  +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/01/28 08:34:54 by rbony             #+#    #+#              #
-#    Updated: 2022/10/14 14:21:08 by rbony            ###   ########lyon.fr    #
+#    Updated: 2022/10/18 15:03:12 by alakhdar         ###   ########lyon.fr    #
 #                                                                              #
 # **************************************************************************** #
 
@@ -16,12 +16,15 @@ SRCS = 	srcs/main.c	\
 		srcs/read_map/read_map.c	\
 		srcs/read_map/check_map.c	\
 		srcs/read_map/check_map_utils.c \
-		srcs/read_map/roue_libre.c \
+		srcs/read_map/error.c	\
+		srcs/read_map/parse_textures.c \
 		srcs/raycasting/raycasting.c \
 		srcs/raycasting/raycasting_utils.c \
 		srcs/raycasting/dda.c \
-		srcs/roue_libre2.c	\
-		srcs/texture.c
+		srcs/raycasting/vertical_rays.c	\
+		srcs/raycasting/horizontal_rays.c	\
+		srcs/game/texture.c	\
+		srcs/game/movements.c
 
 OBJS = ${SRCS:.c=.o}
 

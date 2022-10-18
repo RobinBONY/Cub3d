@@ -6,7 +6,7 @@
 /*   By: rbony <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/19 14:32:48 by rbony             #+#    #+#             */
-/*   Updated: 2022/10/18 10:30:10 by rbony            ###   ########lyon.fr   */
+/*   Updated: 2022/10/18 15:22:35 by rbony            ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,7 +78,7 @@ void	draw_background(t_game *game)
 			if (i < game->win_height / 2)
 				my_mlx_pixel_put(game, j, i, 0x22222F);
 			else
-				my_mlx_pixel_put(game, j, i, 0x800000);
+				my_mlx_pixel_put(game, j, i, 0x4a0904);
 			j++;
 		}
 		i++;
@@ -106,10 +106,7 @@ void	raycasting(t_game *game)
 		ray.col = create_vect(game->player.pos, ray.ra, ray.dist.x);
 		ray.dist.x = ray.dist.x * cos(ray.ra - game->player.pa);
 		draw_column(game, nbr, &ray);
-		//brest(game, game->player.pos.x, game->player.pos.y, col.x, col.y, set_color(ray.hcolor));
 		nbr++;
 		ray.ra = fixang(ray.ra - ((M_PI / 180) * 50) / game->win_width);
 	}
 }
-// distV = ray.dist.y
-// distH = ray.dist.x
