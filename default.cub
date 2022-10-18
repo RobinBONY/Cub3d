@@ -1,7 +1,7 @@
-WE  ./sprites/w_texture.xpm
-EA  ./sprites/e_texture.xpm
-SO  ./sprites/s_texture.xpm
-NO  ./sprites/n_texture.xpm
+WE  ../xpm/bricks.xpm
+EA  ../xpm/oak_log.xpm
+SO  ../xpm/cobblestone.xpm
+NO  ../xpm/obsidian.xpm
 
 F   70,70,70
 C   150,150,230

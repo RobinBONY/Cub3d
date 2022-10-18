@@ -6,7 +6,7 @@
 /*   By: rbony <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/19 14:32:48 by rbony             #+#    #+#             */
-/*   Updated: 2022/10/17 14:54:15 by rbony            ###   ########lyon.fr   */
+/*   Updated: 2022/10/18 10:30:10 by rbony            ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,14 +44,18 @@ void	draw_column(t_game *game, int x, t_raycasting *ray)
 	len = (int)(128 * game->win_height / ray->dist.x);
 	ray->rtexture = set_texture(game, ray);
 	if (ray->hcolor % 2 == 0)
-		ray->tx = ((ray->col.x / 64.0f) - (int)(ray->col.x / 64.0f)) * ray->rtexture.width;
+		ray->tx = ((ray->col.x / 64.0f) - (int)(ray->col.x / 64.0f))
+			* ray->rtexture.width;
 	else
-		ray->tx = ((ray->col.y / 64.0f) - (int)(ray->col.y / 64.0f)) * ray->rtexture.width;
-	ray->ty = 0;
+		ray->tx = ((ray->col.y / 64.0f) - (int)(ray->col.y / 64.0f))
+			* ray->rtexture.width;
 	ray->ratio = (double)ray->rtexture.height / (double)len;
 	i = 0;
 	y = game->win_height / 2 - len / 2;
-	while (i < len - 1)
+	if (y < 0)
+		i = -y;
+	ray->ty = ray->ratio * i;
+	while (i < len - 1 && y + i < game->win_height)
 	{
 		ray->ty += ray->ratio;
 		my_mlx_pixel_put(game, x, y + i,
@@ -74,7 +78,7 @@ void	draw_background(t_game *game)
 			if (i < game->win_height / 2)
 				my_mlx_pixel_put(game, j, i, 0x22222F);
 			else
-				my_mlx_pixel_put(game, j, i, 0x000000);
+				my_mlx_pixel_put(game, j, i, 0x800000);
 			j++;
 		}
 		i++;
