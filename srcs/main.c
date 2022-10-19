@@ -12,9 +12,25 @@
 
 #include "../headers/cub3d.h"
 
-static int	close_window(t_game *game)
+int key_press(int keycode, t_game *game)
 {
-	int	i;
+	if (keycode == 65307 || keycode == 53)
+		close_window(game);
+	else if (keycode < 200)
+		game->keyboard[keycode] = 1;
+	return (0);
+}
+
+int key_release(int keycode, t_game *game)
+{
+	if (keycode < 200)
+		game->keyboard[keycode] = 0;
+	return (1);
+}
+
+static int close_window(t_game *game)
+{
+	int i;
 
 	i = 0;
 	while (i < game->map_height)
@@ -28,52 +44,62 @@ static int	close_window(t_game *game)
 	return (0);
 }
 
-int	manage_events(int keycode, t_game *game)
+int manage_events(t_game *game)
 {
-	if (keycode == 65307 || keycode == 53)
-		close_window(game);
-	if (keycode == 13 || keycode == 122)
+	if (game->keyboard[13] || game->keyboard[122])
 		move_forward(game);
-	if (keycode == 1 || keycode == 115)
+	if (game->keyboard[1] || game->keyboard[115])
 		move_backward(game);
-	if (keycode == 2 || keycode == 100)
+	if (game->keyboard[2] || game->keyboard[100])
 		rotate_right(game);
-	if (keycode == 0 || keycode == 113)
+	if (game->keyboard[0] || game->keyboard[113])
 		rotate_left(game);
+	// fps counter
 	raycasting(game);
 	mlx_put_image_to_window(game->mlx, game->win, game->img.img, 0, 0);
+	// print fps
 	return (0);
 }
 
-void	init(t_game *game)
+int init(t_game *game)
 {
 	game->win_width = 2048;
 	game->win_height = 1024;
-	game->player.pos.x = 0;
-	game->player.pos.y = 0;
+	game->mlx = mlx_init();
+	if (!game->mlx)
+		return (1);
+	game->win = mlx_new_window(game.mlx, game.win_width,
+							   game.win_height, "Cub3D");
+	if (!game->win)
+		return (1);
+	game->img.img = mlx_new_image(game.mlx, 2048, 1024);
+	if (!game->img.img)
+		return (1);
+	game->img.addr = mlx_get_data_addr(game.img.img,
+									   &game.img.bits_per_pixel, &game.img.line_length,
+									   &game.img.endian);
+	if (!game->img.addr)
+		return (1);
+	if (read_map(&game, argv[1]))
+		return (1);
 	gettimeofday(&game->start, NULL);
+	return (0);
 }
 
-int	main(int argc, char **argv)
+int main(int argc, char **argv)
 {
-	t_game	game;
+	t_game game;
 
 	if (argc == 2)
 	{
-		init(&game);
-		game.mlx = mlx_init();
-		if (read_map(&game, argv[1]))
+		if (init(&game))
 			return (0);
-		game.win = mlx_new_window(game.mlx, game.win_width,
-				game.win_height, "Cub3D");
-		game.img.img = mlx_new_image(game.mlx, 2048, 1024);
-		game.img.addr = mlx_get_data_addr(game.img.img,
-				&game.img.bits_per_pixel, &game.img.line_length,
-				&game.img.endian);
-		raycasting(&game);
+		// raycasting(&game);
 		mlx_put_image_to_window(game.mlx, game.win, game.img.img, 0, 0);
+		mlx_hook(game.win, 2, 1L << 0, key_press, &game);
+		mlx_hook(game.win, 3, 1L << 1, key_release, &game);
 		mlx_hook(game.win, 17, 1L << 0, close_window, &game);
-		mlx_hook(game.win, 02, 1L << 0, manage_events, &game);
+		mlx_loop_hook(game.mlx, manage_events, &game);
 		mlx_loop(game.mlx);
 	}
 	return (0);
