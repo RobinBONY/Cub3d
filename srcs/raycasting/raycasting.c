@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   raycasting.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: alakhdar <<marvin@42.fr>>                  +#+  +:+       +#+        */
+/*   By: rbony <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/19 14:32:48 by rbony             #+#    #+#             */
-/*   Updated: 2022/10/18 14:46:40 by alakhdar         ###   ########lyon.fr   */
+/*   Updated: 2022/10/18 15:22:35 by rbony            ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,11 +49,13 @@ void	draw_column(t_game *game, int x, t_raycasting *ray)
 	else
 		ray->tx = ((ray->col.y / 64.0f) - (int)(ray->col.y / 64.0f))
 			* ray->rtexture.width;
-	ray->ty = 0;
 	ray->ratio = (double)ray->rtexture.height / (double)len;
 	i = 0;
 	y = game->win_height / 2 - len / 2;
-	while (i < len - 1)
+	if (y < 0)
+		i = -y;
+	ray->ty = ray->ratio * i;
+	while (i < len - 1 && y + i < game->win_height)
 	{
 		ray->ty += ray->ratio;
 		my_mlx_pixel_put(game, x, y + i,

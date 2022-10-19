@@ -23,6 +23,23 @@ int	ft_isspace(int c)
 	return (0);
 }
 
+void	fill_player_pos(t_game *game, char *dir, int x, int y)
+{
+	game->player.pos.x = x * 64 + 32;
+	game->player.pos.y = y * 64 + 32;
+	if (*dir == 'N')
+		game->player.pa = M_PI / 2;
+	if (*dir == 'E')
+		game->player.pa = 0;
+	if (*dir == 'S')
+		game->player.pa = (3 * M_PI) / 2;
+	if (*dir == 'W')
+		game->player.pa = M_PI;
+	game->player.dir.x = cos(game->player.pa);
+	game->player.dir.y = -sin(game->player.pa);
+	*dir = '0';
+}
+
 void	fill_int_map(t_game *game, t_list *list)
 {
 	t_list	*tmp;
@@ -37,7 +54,12 @@ void	fill_int_map(t_game *game, t_list *list)
 		while (i < game->map_width)
 		{
 			if (i < (int)ft_strlen(tmp->content) && tmp->content[i] - '0' >= 0)
+			{
+				if (tmp->content[i] == 'N' || tmp->content[i] == 'E'
+					|| tmp->content[i] == 'S' || tmp->content[i] == 'W')
+					fill_player_pos(game, &tmp->content[i], i, h);
 				game->map[h][i] = tmp->content[i] - '0';
+			}
 			else
 				game->map[h][i] = -1;
 			i++;
@@ -45,20 +67,6 @@ void	fill_int_map(t_game *game, t_list *list)
 		h++;
 		tmp = tmp->next;
 	}
-}
-
-int	check_closed_width(char *str)
-{
-	int	i;
-
-	i = 0;
-	while (str[i])
-	{
-		if (str[i] != '1' && str[i] != ' ')
-			return (1);
-		i++;
-	}
-	return (0);
 }
 
 int	check_closed_width(char *str)
