@@ -61,6 +61,20 @@ int	check_closed_width(char *str)
 	return (0);
 }
 
+int	check_closed_width(char *str)
+{
+	int	i;
+
+	i = 0;
+	while (str[i])
+	{
+		if (str[i] != '1' && str[i] != ' ')
+			return (1);
+		i++;
+	}
+	return (0);
+}
+
 int	check_closed_sides(char *str)
 {
 	int		i;
