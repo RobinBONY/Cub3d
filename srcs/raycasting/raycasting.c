@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   raycasting.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rbony <marvin@42.fr>                       +#+  +:+       +#+        */
+/*   By: alakhdar <<marvin@42.fr>>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/19 14:32:48 by rbony             #+#    #+#             */
-/*   Updated: 2022/10/18 15:22:35 by rbony            ###   ########lyon.fr   */
+/*   Updated: 2022/10/19 15:26:27 by alakhdar         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,9 +76,9 @@ void	draw_background(t_game *game)
 		while (j < game->win_width)
 		{
 			if (i < game->win_height / 2)
-				my_mlx_pixel_put(game, j, i, 0x22222F);
+				my_mlx_pixel_put(game, j, i, 0x010a1f);
 			else
-				my_mlx_pixel_put(game, j, i, 0x4a0904);
+				my_mlx_pixel_put(game, j, i, 0x210020);
 			j++;
 		}
 		i++;

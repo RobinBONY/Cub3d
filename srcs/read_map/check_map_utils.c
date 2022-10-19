@@ -23,31 +23,35 @@ int	ft_isspace(int c)
 	return (0);
 }
 
-void	fill_player_pos(t_game *game, char *dir, int x, int y)
+int	fill_player_pos(t_game *game, char *dir, int x, int y)
 {
-	game->player.pos.x = x * 64 + 32;
-	game->player.pos.y = y * 64 + 32;
-	if (*dir == 'N')
-		game->player.pa = M_PI / 2;
-	if (*dir == 'E')
-		game->player.pa = 0;
-	if (*dir == 'S')
-		game->player.pa = (3 * M_PI) / 2;
-	if (*dir == 'W')
-		game->player.pa = M_PI;
-	game->player.dir.x = cos(game->player.pa);
-	game->player.dir.y = -sin(game->player.pa);
-	*dir = '0';
+	if (game->player.pos.x == 0 && game->player.pos.y == 0)
+	{
+		game->player.pos.x = x * 64 + 32;
+		game->player.pos.y = y * 64 + 32;
+		if (*dir == 'N')
+			game->player.pa = M_PI / 2;
+		if (*dir == 'E')
+			game->player.pa = 0;
+		if (*dir == 'S')
+			game->player.pa = (3 * M_PI) / 2;
+		if (*dir == 'W')
+			game->player.pa = M_PI;
+		game->player.dir.x = cos(game->player.pa);
+		game->player.dir.y = -sin(game->player.pa);
+		*dir = '0';
+	}
+	else
+		return (1);
+	return (0);
 }
 
-void	fill_int_map(t_game *game, t_list *list)
+int	fill_int_map(t_game *game, t_list *tmp)
 {
-	t_list	*tmp;
 	int		h;
 	int		i;
 
 	h = 0;
-	tmp = list;
 	while (h < game->map_height)
 	{
 		i = 0;
@@ -57,7 +61,8 @@ void	fill_int_map(t_game *game, t_list *list)
 			{
 				if (tmp->content[i] == 'N' || tmp->content[i] == 'E'
 					|| tmp->content[i] == 'S' || tmp->content[i] == 'W')
-					fill_player_pos(game, &tmp->content[i], i, h);
+					if (fill_player_pos(game, &tmp->content[i], i, h))
+						return (1);
 				game->map[h][i] = tmp->content[i] - '0';
 			}
 			else
@@ -67,6 +72,7 @@ void	fill_int_map(t_game *game, t_list *list)
 		h++;
 		tmp = tmp->next;
 	}
+	return (0);
 }
 
 int	check_closed_width(char *str)

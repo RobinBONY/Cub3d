@@ -66,8 +66,7 @@ int	create_int_map(t_game *game, t_list *list)
 			return (1);
 		i++;
 	}
-	fill_int_map(game, list);
-	return (0);
+	return (fill_int_map(game, list));
 }
 
 int	check_map_layout(t_list *head, t_game *game)
