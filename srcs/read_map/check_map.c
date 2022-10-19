@@ -77,6 +77,8 @@ int	check_map_layout(t_list *head, t_game *game)
 	game->map_height = 1;
 	tmp = head;
 	max_len = ft_strlen(tmp->content);
+	if (check_closed_width(tmp->content))
+		return (1);
 	while (tmp->next != NULL)
 	{
 		if ((int)ft_strlen(tmp->content) > max_len)
@@ -84,6 +86,8 @@ int	check_map_layout(t_list *head, t_game *game)
 		tmp = tmp->next;
 		game->map_height++;
 	}
+	if (check_closed_width(tmp->content))
+		return (1);
 	if ((int)ft_strlen(tmp->content) > max_len)
 			max_len = ft_strlen(tmp->content);
 	game->map_width = max_len;
