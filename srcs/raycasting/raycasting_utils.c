@@ -6,7 +6,7 @@
 /*   By: rbony <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/19 14:32:49 by rbony             #+#    #+#             */
-/*   Updated: 2022/10/11 14:00:06 by rbony            ###   ########lyon.fr   */
+/*   Updated: 2022/10/20 13:47:41 by rbony            ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,14 +37,10 @@ t_point	create_vect(t_point origin, float radian, float length)
 	return (vector);
 }
 
-t_point	init_vector(t_point start, t_point dest, double camera)
+unsigned long	rgb_to_hexa(t_color color)
 {
-	t_point	v;
-
-	dprintf(2, "%f/n", camera);
-	v.x = (dest.x - start.x) + 0 * camera;
-	v.y = (dest.y - start.y) + 0.7 * camera;
-	return (v);
+	return (((color.r & 0xff) << 16) + ((color.g & 0xff) << 8)
+		+ (color.b & 0xff));
 }
 
 double	get_timestamp(struct timeval start)

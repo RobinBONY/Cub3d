@@ -3,14 +3,22 @@
 /*                                                        :::      ::::::::   */
 /*   error.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: alakhdar <<marvin@42.fr>>                  +#+  +:+       +#+        */
+/*   By: rbony <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/18 14:34:21 by alakhdar          #+#    #+#             */
-/*   Updated: 2022/10/18 14:37:07 by alakhdar         ###   ########lyon.fr   */
+/*   Updated: 2022/10/20 15:28:45 by rbony            ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../headers/cub3d.h"
+
+int	check_text_db(t_game *game)
+{
+	return (game->map_info.n_texture.img
+		&& game->map_info.e_texture.img
+		&& game->map_info.s_texture.img
+		&& game->map_info.w_texture.img);
+}
 
 int	error_1(char *str)
 {

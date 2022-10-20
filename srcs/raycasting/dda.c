@@ -3,14 +3,26 @@
 /*                                                        :::      ::::::::   */
 /*   dda.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: alakhdar <<marvin@42.fr>>                  +#+  +:+       +#+        */
+/*   By: rbony <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/18 15:02:29 by alakhdar          #+#    #+#             */
-/*   Updated: 2022/10/18 15:04:52 by alakhdar         ###   ########lyon.fr   */
+/*   Updated: 2022/10/20 15:32:43 by rbony            ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../headers/cub3d.h"
+
+void	calculate_tx(t_raycasting *ray)
+{
+	if (ray->hcolor % 2 == 0)
+		ray->tx = ((ray->col.x / 64.0f) - (int)(ray->col.x / 64.0f))
+			* ray->rtexture.width;
+	else
+		ray->tx = ((ray->col.y / 64.0f) - (int)(ray->col.y / 64.0f))
+			* ray->rtexture.width;
+	if (ray->hcolor == 3 || ray->hcolor == 4)
+		ray->tx = ray->rtexture.width - ray->tx;
+}
 
 void	check_vertical(t_game *game, t_raycasting *ray)
 {

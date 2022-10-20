@@ -6,7 +6,7 @@
 /*   By: rbony <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/10 17:08:31 by rbony             #+#    #+#             */
-/*   Updated: 2022/10/20 11:04:41 by rbony            ###   ########lyon.fr   */
+/*   Updated: 2022/10/20 15:21:34 by rbony            ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,6 +88,8 @@ static int	parse_file(t_game *game, char *mapname)
 		return (error_1(INVALID_MAP));
 	if (game->player.pos.x == 0 && game->player.pos.y == 0)
 		return (error_1(MISS_P_POS));
+	if (!check_text_db(game))
+		return (error_1(MISS_TEXTURE));
 	return (0);
 }
 

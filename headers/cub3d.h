@@ -6,7 +6,7 @@
 /*   By: rbony <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/09 15:34:36 by rbony             #+#    #+#             */
-/*   Updated: 2022/10/20 10:56:11 by rbony            ###   ########lyon.fr   */
+/*   Updated: 2022/10/20 15:32:51 by rbony            ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -121,57 +121,61 @@ typedef struct s_game
 }	t_game;
 
 // read_map
-int		read_map(t_game *game, char *mapname);
+int				read_map(t_game *game, char *mapname);
 
 // check_map
-int		check_ext(char *str, char *ext);
-int		check_closed_height(char *str);
-int		check_closed_width(char *str);
-int		create_int_map(t_game *game, t_list *list);
-int		check_map_layout(t_list *head, t_game *game);
-int		fill_int_map(t_game *game, t_list *list);
-int		check_closed_width(char *str);
-int		check_closed_sides(char *str);
-int		error_1(char *str);
-int		error_2(char *str1, char *str2);
-int		parse_textures(t_game *game, t_list **list);
-int		split_size(char **split);
-double	fixang(double a);
-void	raycasting(t_game *game);
-int		in_map(t_game *game, int x, int y);
-void	dda(t_game *game, t_raycasting *ray);
-t_point	create_vect(t_point origin, float radian, float length);
-t_point	init_vector(t_point start, t_point dest, double camera);
-double	get_timestamp(struct timeval start);
-void	draw_map(t_game *game);
-void	draw_background(t_game *game);
-void	my_mlx_pixel_put(t_game *game, int x, int y, int color);
-int		store_textures_on_image(t_game *game, t_texture *texture,
-			char *texture_path);
-int		get_text_pixel(t_texture *texture, int x, int y);
-int		check_valid_cells(int **map, t_game *game, int i, int j);
-int		ft_isspace(int c);
-void	free_split(char **split);
-int		split_size(char **split);
-void	move_forward(t_game *game);
-void	move_backward(t_game *game);
-void	move_left(t_game *game);
-void	move_right(t_game *game);
-void	rotate_right(t_game *game);
-void	rotate_left(t_game *game);
-void	vert_facing_left(t_game *game, t_raycasting *ray);
-void	vert_facing_right(t_game *game, t_raycasting *ray);
-void	vert_up_down(t_game *game, t_raycasting *ray);
-void	get_disty(t_game *game, t_raycasting *ray);
-void	hori_facing_up(t_game *game, t_raycasting *ray);
-void	hori_facing_down(t_game *game, t_raycasting *ray);
-void	vert_facing_rl(t_game *game, t_raycasting *ray);
-void	print_menu(t_game *data);
-int		close_window(t_game *game);
-int		key_press(int keycode, t_game *game);
-int		key_release(int keycode, t_game *game);
-int		manage_events(t_game *game);
-void	clear_game(t_game *game);
-void	set_default(t_game *game);
+int				check_ext(char *str, char *ext);
+int				check_closed_height(char *str);
+int				check_closed_width(char *str);
+int				create_int_map(t_game *game, t_list *list);
+int				check_map_layout(t_list *head, t_game *game);
+int				fill_int_map(t_game *game, t_list *list);
+int				check_closed_width(char *str);
+int				check_closed_sides(char *str);
+int				error_1(char *str);
+int				error_2(char *str1, char *str2);
+int				parse_textures(t_game *game, t_list **list);
+int				split_size(char **split);
+double			fixang(double a);
+void			raycasting(t_game *game);
+int				in_map(t_game *game, int x, int y);
+void			dda(t_game *game, t_raycasting *ray);
+t_point			create_vect(t_point origin, float radian, float length);
+t_point			init_vector(t_point start, t_point dest, double camera);
+double			get_timestamp(struct timeval start);
+void			draw_map(t_game *game);
+void			draw_background(t_game *game);
+void			my_mlx_pixel_put(t_game *game, int x, int y, int color);
+int				store_textures_on_image(t_game *game, t_texture *texture,
+					char *texture_path);
+int				get_text_pixel(t_texture *texture, int x, int y);
+int				check_valid_cells(int **map, t_game *game, int i, int j);
+int				ft_isspace(int c);
+void			free_split(char **split);
+int				split_size(char **split);
+void			move_forward(t_game *game);
+void			move_backward(t_game *game);
+void			move_left(t_game *game);
+void			move_right(t_game *game);
+void			rotate_right(t_game *game);
+void			rotate_left(t_game *game);
+void			vert_facing_left(t_game *game, t_raycasting *ray);
+void			vert_facing_right(t_game *game, t_raycasting *ray);
+void			vert_up_down(t_game *game, t_raycasting *ray);
+void			get_disty(t_game *game, t_raycasting *ray);
+void			hori_facing_up(t_game *game, t_raycasting *ray);
+void			hori_facing_down(t_game *game, t_raycasting *ray);
+void			vert_facing_rl(t_game *game, t_raycasting *ray);
+void			print_menu(t_game *data);
+int				close_window(t_game *game);
+int				key_press(int keycode, t_game *game);
+int				key_release(int keycode, t_game *game);
+int				manage_events(t_game *game);
+void			clear_game(t_game *game);
+void			set_default(t_game *game);
+int				check_directory(char *mapname);
+unsigned long	rgb_to_hexa(t_color color);
+int				check_text_db(t_game *game);
+void			calculate_tx(t_raycasting *ray);
 
 #endif
