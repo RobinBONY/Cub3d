@@ -12,9 +12,9 @@
 
 #include "../../headers/cub3d.h"
 
-static int	is_empty(char *str)
+static int is_empty(char *str)
 {
-	int	i;
+	int i;
 
 	i = 0;
 	while (str[i])
@@ -26,12 +26,12 @@ static int	is_empty(char *str)
 	return (1);
 }
 
-static t_list	*fill_map_list(char *mapname)
+static t_list *fill_map_list(char *mapname)
 {
-	int		fd;
-	char	*buffer;
-	t_list	*tmp;
-	t_list	*head;
+	int fd;
+	char *buffer;
+	t_list *tmp;
+	t_list *head;
 
 	head = NULL;
 	fd = open(mapname, O_RDONLY);
@@ -55,42 +55,46 @@ static t_list	*fill_map_list(char *mapname)
 	return (head);
 }
 
-int	parse_map(t_game *game, t_list *list)
+int parse_map(t_game *game, t_list *list)
 {
+	if (!list)
+		return (1);
 	if (check_map_layout(list, game))
 		return (1);
 	return (create_int_map(game, list));
 }
 
-static int	parse_file(t_game *game, char *mapname)
+static int parse_file(t_game *game, char *mapname)
 {
-	t_list	*head;
-	t_list	*tmp;
-	int		i;
-	int		j;
+	t_list *head;
+	t_list *tmp;
 
-	i = 0;
-	j = 0;
 	head = fill_map_list(mapname);
 	if (!head)
 		return (error_1(READING_FILE));
 	tmp = head;
 	if (parse_textures(game, &tmp))
-		return (1);
+	{
+		ft_lstclear(&head);
+		return (error_1(TEXTURE_NF));
+	}
 	if (parse_map(game, tmp))
+	{
+		ft_lstclear(&head);
 		return (error_1(INVALID_MAP));
-	if (check_valid_cells(game->map, game, i, j))
+	}
+	ft_lstclear(&head);
+	if (check_valid_cells(game->map, game, 0, 0))
 		return (error_1(INVALID_MAP));
 	if (game->player.pos.x == 0 && game->player.pos.y == 0)
 		return (error_1(MISS_P_POS));
-	ft_lstclear(&head);
 	return (0);
 }
 
 // reads the map and fill the game attributes
-int	read_map(t_game *game, char *mapname)
+int read_map(t_game *game, char *mapname)
 {
-	int	file_exists;
+	int file_exists;
 
 	file_exists = access(mapname, R_OK);
 	if (check_ext(mapname, ".cub") && file_exists == 0)
