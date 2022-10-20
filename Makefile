@@ -6,7 +6,7 @@
 #    By: rbony <marvin@42.fr>                       +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/01/28 08:34:54 by rbony             #+#    #+#              #
-#    Updated: 2022/10/19 13:59:12 by rbony            ###   ########lyon.fr    #
+#    Updated: 2022/10/20 11:04:05 by rbony            ###   ########lyon.fr    #
 #                                                                              #
 # **************************************************************************** #
 
@@ -39,7 +39,7 @@ OBJS_BONUS = ${SRCS_BONUS:.c=.o}
 
 INCLUDES = headers/cub3d.h
 
-CC = gcc -g #-fsanitize=address
+CC = gcc #-fsanitize=address
 RM = rm -f
 
 FLAGS = -Wall -Wextra -Werror -O3

@@ -6,11 +6,35 @@
 /*   By: rbony <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/09 15:38:45 by rbony             #+#    #+#             */
-/*   Updated: 2022/10/19 13:57:31 by rbony            ###   ########lyon.fr   */
+/*   Updated: 2022/10/20 11:44:50 by rbony            ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../headers/cub3d.h"
+
+void	clear_game(t_game *game)
+{
+	int	i;
+
+	if (game->map)
+	{
+		i = 0;
+		while (i < game->map_height)
+		{
+			free(game->map[i]);
+			i++;
+		}
+		free(game->map);
+	}
+	if (game->map_info.n_texture.texture_path)
+		free(game->map_info.n_texture.texture_path);
+	if (game->map_info.s_texture.texture_path)
+		free(game->map_info.s_texture.texture_path);
+	if (game->map_info.e_texture.texture_path)
+		free(game->map_info.e_texture.texture_path);
+	if (game->map_info.w_texture.texture_path)
+		free(game->map_info.w_texture.texture_path);
+}
 
 int	init(t_game *game, char *argv)
 {
@@ -18,7 +42,6 @@ int	init(t_game *game, char *argv)
 	game->win_height = 1024;
 	game->player.pos.x = 0;
 	game->player.pos.y = 0;
-	ft_memset(game->keyboard, 0, 200);
 	game->mlx = mlx_init();
 	if (!game->mlx)
 		return (1);
@@ -45,10 +68,14 @@ int	main(int argc, char **argv)
 {
 	t_game	game;
 
+	ft_memset(&game, 0, sizeof(t_game));
 	if (argc == 2)
 	{
 		if (init(&game, argv[1]))
+		{
+			close_window(&game);
 			return (0);
+		}
 		mlx_put_image_to_window(game.mlx, game.win, game.img.img, 0, 0);
 		mlx_hook(game.win, 2, 1L << 0, key_press, &game);
 		mlx_hook(game.win, 3, 1L << 1, key_release, &game);

@@ -6,7 +6,7 @@
 /*   By: rbony <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/19 13:57:02 by rbony             #+#    #+#             */
-/*   Updated: 2022/10/19 13:58:14 by rbony            ###   ########lyon.fr   */
+/*   Updated: 2022/10/20 11:07:56 by rbony            ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,15 +32,7 @@ void	print_menu(t_game *data)
 
 int	close_window(t_game *game)
 {
-	int	i;
-
-	i = 0;
-	while (i < game->map_height)
-	{
-		free(game->map[i]);
-		i++;
-	}
-	free(game->map);
+	clear_game(game);
 	mlx_destroy_window(game->mlx, game->win);
 	exit(0);
 	return (0);

@@ -6,15 +6,15 @@
 /*   By: rbony <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/10 17:08:31 by rbony             #+#    #+#             */
-/*   Updated: 2022/10/18 15:45:49 by rbony            ###   ########lyon.fr   */
+/*   Updated: 2022/10/20 11:04:41 by rbony            ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../headers/cub3d.h"
 
-static int is_empty(char *str)
+static int	is_empty(char *str)
 {
-	int i;
+	int	i;
 
 	i = 0;
 	while (str[i])
@@ -26,12 +26,12 @@ static int is_empty(char *str)
 	return (1);
 }
 
-static t_list *fill_map_list(char *mapname)
+static t_list	*fill_map_list(char *mapname)
 {
-	int fd;
-	char *buffer;
-	t_list *tmp;
-	t_list *head;
+	int		fd;
+	char	*buffer;
+	t_list	*tmp;
+	t_list	*head;
 
 	head = NULL;
 	fd = open(mapname, O_RDONLY);
@@ -55,7 +55,7 @@ static t_list *fill_map_list(char *mapname)
 	return (head);
 }
 
-int parse_map(t_game *game, t_list *list)
+int	parse_map(t_game *game, t_list *list)
 {
 	if (!list)
 		return (1);
@@ -64,10 +64,10 @@ int parse_map(t_game *game, t_list *list)
 	return (create_int_map(game, list));
 }
 
-static int parse_file(t_game *game, char *mapname)
+static int	parse_file(t_game *game, char *mapname)
 {
-	t_list *head;
-	t_list *tmp;
+	t_list	*head;
+	t_list	*tmp;
 
 	head = fill_map_list(mapname);
 	if (!head)
@@ -92,9 +92,9 @@ static int parse_file(t_game *game, char *mapname)
 }
 
 // reads the map and fill the game attributes
-int read_map(t_game *game, char *mapname)
+int	read_map(t_game *game, char *mapname)
 {
-	int file_exists;
+	int	file_exists;
 
 	file_exists = access(mapname, R_OK);
 	if (check_ext(mapname, ".cub") && file_exists == 0)

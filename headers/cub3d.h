@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cub3d.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: alakhdar <<marvin@42.fr>>                  +#+  +:+       +#+        */
+/*   By: rbony <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/09 15:34:36 by rbony             #+#    #+#             */
-/*   Updated: 2022/10/19 14:03:30 by alakhdar         ###   ########lyon.fr   */
+/*   Updated: 2022/10/20 10:56:11 by rbony            ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -102,7 +102,6 @@ typedef struct s_game
 	struct s_data		img;
 	int					win_width;
 	int					win_height;
-	struct s_texture	textures;
 	int					**map;
 	int					map_width;
 	int					map_height;
@@ -172,5 +171,7 @@ int		close_window(t_game *game);
 int		key_press(int keycode, t_game *game);
 int		key_release(int keycode, t_game *game);
 int		manage_events(t_game *game);
+void	clear_game(t_game *game);
+void	set_default(t_game *game);
 
 #endif
