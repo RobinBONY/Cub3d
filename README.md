@@ -1,7 +1,8 @@
 # Cub3d - Tiny Raycaster
 
 
-This project is inspired by the world-famous 90’s game 'WOLFENSTEIN', which is considered to be the first FPS ever.
+This project is inspired by the world-famous 90’s game 'WOLFENSTEIN', considered to be the first FPS ever.
+
 
 ![ef48d3686e28da74fedb0773226e3b58](https://user-images.githubusercontent.com/13594148/197554737-c4fdec93-63cc-415a-9b8a-e9de8d5eca3c.png)
 
