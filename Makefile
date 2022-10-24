@@ -6,13 +6,13 @@
 #    By: rbony <marvin@42.fr>                       +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/01/28 08:34:54 by rbony             #+#    #+#              #
-#    Updated: 2022/10/20 15:26:04 by rbony            ###   ########lyon.fr    #
+#    Updated: 2022/10/20 15:39:22 by rbony            ###   ########lyon.fr    #
 #                                                                              #
 # **************************************************************************** #
 
-NAME = cub3d
+NAME = cub3D
 
-NAME_BONUS = cub3d_bonus
+NAME_BONUS = cub3D_bonus
 
 SRCS_GLOBAL = 	srcs/main.c	\
 		srcs/read_map/read_map.c	\

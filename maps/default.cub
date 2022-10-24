@@ -1,7 +1,7 @@
-WE  ./sprites/neonray.xpm
-EA  ./sprites/neontunnelbright.xpm
-SO  ./sprites/neontunneltriangle.xpm
-NO  ./sprites/neontunnelsquare.xpm
+WE  ../xpm/bricks.xpm
+EA  ../xpm/bricks.xpm
+SO  ../xpm/bricks.xpm
+NO  ../xpm/bricks.xpm
 
 F   255,0,255
 C   0,0,0

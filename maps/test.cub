@@ -1,13 +1,13 @@
-WE  ./sprites/neontunnelsquare.xpm
-EA  ./sprites/neontunnelsquare.xpm
-SO  ./sprites/neontunnelsquare.xpm
-NO  ./sprites/neontunnelsquare.xpm
+WE  ../xpm/bricks.xpm
+EA  ../xpm/neontunnelsquare.xpm
+SO  ../xpm/neontunnelsquare.xpm
+NO  ../xpm/neontunnelsquare.xpm
 
 C   255,255,255
 F   0,0,0
 
      1111
-    100001
-    10101    1
-    10N01
+    101001
+    11W11    1
+    10101
      111 
