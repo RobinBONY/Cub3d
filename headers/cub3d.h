@@ -6,7 +6,7 @@
 /*   By: rbony <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/09 15:34:36 by rbony             #+#    #+#             */
-/*   Updated: 2022/10/20 15:32:51 by rbony            ###   ########lyon.fr   */
+/*   Updated: 2022/10/24 11:25:24 by rbony            ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -139,7 +139,7 @@ int				split_size(char **split);
 double			fixang(double a);
 void			raycasting(t_game *game);
 int				in_map(t_game *game, int x, int y);
-void			dda(t_game *game, t_raycasting *ray);
+t_raycasting	dda(t_game *game, float ra);
 t_point			create_vect(t_point origin, float radian, float length);
 t_point			init_vector(t_point start, t_point dest, double camera);
 double			get_timestamp(struct timeval start);
