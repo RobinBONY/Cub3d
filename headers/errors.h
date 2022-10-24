@@ -6,17 +6,14 @@
 /*   By: rbony <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/10 10:55:14 by rbony             #+#    #+#             */
-/*   Updated: 2022/08/17 08:36:48 by rbony            ###   ########lyon.fr   */
+/*   Updated: 2022/10/20 15:21:25 by rbony            ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef ERRORS_H
 # define ERRORS_H
 
-# define MISS_N_TEXTURE "Missing North texture"
-# define MISS_S_TEXTURE "Missing South texture"
-# define MISS_E_TEXTURE "Missing East texture"
-# define MISS_W_TEXTURE "Missing West texture"
+# define MISS_TEXTURE "Missing texture"
 
 # define MISS_F_COLOR    "Missing Ground color"
 # define MISS_C_COLOR    "Missing Ceiling color"

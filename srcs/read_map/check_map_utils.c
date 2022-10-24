@@ -12,7 +12,7 @@
 
 #include "../../headers/cub3d.h"
 
-static int	ft_isspace(int c)
+int	ft_isspace(int c)
 {
 	if (c && (c == 32 || c == 9
 			|| c == 10 || c == 11
@@ -23,48 +23,48 @@ static int	ft_isspace(int c)
 	return (0);
 }
 
-/*Debug functions*/
-
-void	print_data(t_game *game)
+int	fill_player_pos(t_game *game, char *dir, int x, int y)
 {
-	int	i;
-	int	j;
-
-	printf("n texture : %d\n", game->textures.n_texture);
-	printf("s texture : %d\n", game->textures.s_texture);
-	printf("e texture : %d\n", game->textures.e_texture);
-	printf("w texture : %d\n", game->textures.w_texture);
-	printf("f color : %d,%d,%d\n", game->textures.f_color.r, game->textures.f_color.g, game->textures.f_color.b);
-	printf("c color : %d,%d,%d\n", game->textures.c_color.r, game->textures.c_color.g, game->textures.c_color.b);
-	i = 0;
-	while (i < game->map_height)
+	if (game->player.pos.x == 0 && game->player.pos.y == 0)
 	{
-		j = 0;
-		while (j < game->map_width)
-		{
-			printf("%d\t", game->map[i][j]);
-			j++;
-		}
-		printf("%c", '\n');
-		i++;
+		game->player.pos.x = x * 64 + 32;
+		game->player.pos.y = y * 64 + 32;
+		if (*dir == 'N')
+			game->player.pa = M_PI / 2;
+		if (*dir == 'E')
+			game->player.pa = 0;
+		if (*dir == 'S')
+			game->player.pa = (3 * M_PI) / 2;
+		if (*dir == 'W')
+			game->player.pa = M_PI;
+		game->player.dir.x = cos(game->player.pa);
+		game->player.dir.y = -sin(game->player.pa);
+		*dir = '0';
 	}
+	else
+		return (1);
+	return (0);
 }
 
-void	fill_int_map(t_game *game, t_list *list)
+int	fill_int_map(t_game *game, t_list *tmp)
 {
-	t_list	*tmp;
 	int		h;
 	int		i;
 
 	h = 0;
-	tmp = list;
 	while (h < game->map_height)
 	{
 		i = 0;
 		while (i < game->map_width)
 		{
 			if (i < (int)ft_strlen(tmp->content) && tmp->content[i] - '0' >= 0)
+			{
+				if (tmp->content[i] == 'N' || tmp->content[i] == 'E'
+					|| tmp->content[i] == 'S' || tmp->content[i] == 'W')
+					if (fill_player_pos(game, &tmp->content[i], i, h))
+						return (1);
 				game->map[h][i] = tmp->content[i] - '0';
+			}
 			else
 				game->map[h][i] = -1;
 			i++;
@@ -72,6 +72,7 @@ void	fill_int_map(t_game *game, t_list *list)
 		h++;
 		tmp = tmp->next;
 	}
+	return (0);
 }
 
 int	check_closed_width(char *str)
@@ -93,6 +94,9 @@ int	check_closed_sides(char *str)
 	int		i;
 
 	i = 0;
+	if (str[i] != '1')
+		if (!ft_isspace(str[i]))
+			return (1);
 	while (str[i] && str[i + 1])
 	{
 		if (ft_isspace(str[i]) && str[i + 1] == '0')
@@ -101,5 +105,8 @@ int	check_closed_sides(char *str)
 			return (1);
 		i++;
 	}
+	if (str[i] != '1')
+		if (!ft_isspace(str[i]))
+			return (1);
 	return (0);
 }

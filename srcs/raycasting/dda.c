@@ -5,110 +5,89 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: rbony <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/09/19 14:32:47 by rbony             #+#    #+#             */
-/*   Updated: 2022/09/20 13:04:20 by rbony            ###   ########lyon.fr   */
+/*   Created: 2022/10/18 15:02:29 by alakhdar          #+#    #+#             */
+/*   Updated: 2022/10/20 15:32:43 by rbony            ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../headers/cub3d.h"
 
-static void	define_side(t_game *game, t_raycasting *ray)
+void	calculate_tx(t_raycasting *ray)
 {
-	if (ray->dir.dx < 0)
-	{
-		ray->step.x = -1;
-		ray->side_dist.dx = (game->player.x - ray->map_x) * ray->delta_dist.dx;
-	}
+	if (ray->hcolor % 2 == 0)
+		ray->tx = ((ray->col.x / 64.0f) - (int)(ray->col.x / 64.0f))
+			* ray->rtexture.width;
 	else
-	{
-		ray->step.x = 1;
-		ray->side_dist.dx = (ray->map_x + 1.0f - game->player.x)
-			* ray->delta_dist.dx;
-	}
-	if (ray->dir.dy < 0)
-	{
-		ray->step.y = -1;
-		ray->side_dist.dy = (game->player.y - ray->map_y) * ray->delta_dist.dy;
-	}
-	else
-	{
-		ray->step.y = 1;
-		ray->side_dist.dy = (ray->map_y + 1.0f - game->player.y)
-			* ray->delta_dist.dy;
-	}
+		ray->tx = ((ray->col.y / 64.0f) - (int)(ray->col.y / 64.0f))
+			* ray->rtexture.width;
+	if (ray->hcolor == 3 || ray->hcolor == 4)
+		ray->tx = ray->rtexture.width - ray->tx;
 }
 
-static t_raycasting	init_dda(t_game *game, float ra)
+void	check_vertical(t_game *game, t_raycasting *ray)
 {
-	t_raycasting		ray;
-
-	ray.map_x = (int)game->player.x;
-	ray.map_y = (int)game->player.y;
-	ray.dir = init_vector(game->player, create_vect(game->player, ra, 1));
-	if (ray.dir.dx == 0.0f)
-		ray.delta_dist.dx = 1e30;
+	ray->rtan = tan(ray->ra);
+	if (cos(ray->ra) > 0.001)
+		vert_facing_left(game, ray);
+	else if (cos(ray->ra) < -0.001)
+		vert_facing_right(game, ray);
 	else
-		ray.delta_dist.dx = fabsf(1.0f / ray.dir.dx);
-	if (ray.dir.dy == 0.0f)
-		ray.delta_dist.dy = 1e30;
-	else
-		ray.delta_dist.dy = fabsf(1.0f / ray.dir.dy);
-	define_side(game, &ray);
-	return (ray);
-}
-
-static void	next_collision(t_raycasting *ray)
-{
-	if (ray->side_dist.dx < ray->side_dist.dy)
+		vert_up_down(game, ray);
+	while (ray->dof < 100)
 	{
-		ray->side_dist.dx += ray->delta_dist.dx;
-		ray->map_x += ray->step.x;
-		ray->side_hit.x = ray->step.x;
-		ray->side_hit.y = 0;
-	}
-	else
-	{
-		ray->side_dist.dy += ray->delta_dist.dy;
-		ray->map_y += ray->step.y;
-		ray->side_hit.y = ray->step.y;
-		ray->side_hit.x = 0;
-	}
-}
-
-static float	perp_dist(t_raycasting ray, t_game *game, float ra)
-{
-	float	line;
-
-	if (ray.side_hit.y == 0)
-		line = ((ray.side_dist.dx - ray.delta_dist.dx)
-				* cos(fixang(game->pa - ra)));
-	else
-		line = ((ray.side_dist.dy - ray.delta_dist.dy)
-				* cos(fixang(game->pa - ra)));
-	return (line);
-}
-
-t_raycasting	dda(t_game *game, float ra)
-{
-	t_raycasting		ray;
-
-	ray = init_dda(game, ra);
-	while (1)
-	{
-		next_collision(&ray);
-		if (game->map[ray.map_y][ray.map_x] == 1)
+		ray->map_x = (int)(ray->ray.x) >> 6;
+		ray->map_y = (int)(ray->ray.y) >> 6;
+		if (in_map(game, ray->map_x, ray->map_y)
+			&& game->map[ray->map_y][ray->map_x] == 1)
+			get_disty(game, ray);
+		else
 		{
-			ray.perp_dist = perp_dist(ray, game, ra);
-			if (ray.side_hit.x == 1)
-				ray.side = 3;
-			else if (ray.side_hit.x == -1)
-				ray.side = 1;
-			else if (ray.side_hit.y == 1)
-				ray.side = 0;
-			else
-				ray.side = 2;
-			return (ray);
+			ray->ray.x += ray->o.x;
+			ray->ray.y += ray->o.y;
+			ray->dof += 1;
 		}
 	}
-	return (ray);
+	ray->vertical.x = ray->ray.x;
+	ray->vertical.y = ray->ray.y;
+}
+
+void	check_horizontal(t_game *game, t_raycasting *ray)
+{
+	ray->rtan = 1.0 / ray->rtan;
+	if (sin(ray->ra) > 0.001)
+		hori_facing_up(game, ray);
+	else if (sin(ray->ra) < -0.001)
+		hori_facing_down(game, ray);
+	else
+		vert_facing_rl(game, ray);
+	while (ray->dof < 100)
+	{
+		ray->map_x = (int)(ray->ray.x) >> 6;
+		ray->map_y = (int)(ray->ray.y) >> 6;
+		if (in_map(game, ray->map_x, ray->map_y)
+			&& game->map[ray->map_y][ray->map_x] == 1)
+		{
+			ray->dof = 100;
+			ray->dist.x = cos(ray->ra) * (ray->ray.x - game->player.pos.x)
+				- sin(ray->ra) * (ray->ray.y - game->player.pos.y);
+		}
+		else
+		{
+			ray->ray.x += ray->o.x;
+			ray->ray.y += ray->o.y;
+			ray->dof += 1;
+		}
+	}
+}
+
+void	dda(t_game *game, t_raycasting *ray)
+{
+	ray->dof = 0;
+	ray->vcolor = 0;
+	ray->hcolor = 0;
+	ray->dist.y = 1000000;
+	check_vertical(game, ray);
+	ray->dof = 0;
+	ray->dist.x = 1000000;
+	check_horizontal(game, ray);
 }

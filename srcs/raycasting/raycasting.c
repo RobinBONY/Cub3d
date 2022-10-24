@@ -6,13 +6,13 @@
 /*   By: rbony <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/19 14:32:48 by rbony             #+#    #+#             */
-/*   Updated: 2022/09/20 11:32:36 by rbony            ###   ########lyon.fr   */
+/*   Updated: 2022/10/20 15:32:59 by rbony            ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../headers/cub3d.h"
 
-static void	my_mlx_pixel_put(t_game *game, int x, int y, int color)
+void	my_mlx_pixel_put(t_game *game, int x, int y, int color)
 {
 	char	*dst;
 
@@ -23,37 +23,43 @@ static void	my_mlx_pixel_put(t_game *game, int x, int y, int color)
 	*(unsigned int *)dst = color;
 }
 
-int	set_color(int side)
+t_texture	set_texture(t_game *game, t_raycasting *ray)
 {
-	if (side == 0)
-		return (0xFF0000);
-	else if (side == 1)
-		return (0x00FF00);
-	else if (side == 2)
-		return (0x0000FF);
+	if (ray->hcolor == 1)
+		return (game->map_info.e_texture);
+	else if (ray->hcolor == 2)
+		return (game->map_info.n_texture);
+	else if (ray->hcolor == 3)
+		return (game->map_info.w_texture);
 	else
-		return (0xFFFF00);
+		return (game->map_info.s_texture);
 }
 
-static void	draw_column(t_game *game, int x, t_raycasting *ray)
+void	draw_column(t_game *game, int x, t_raycasting *ray)
 {
 	int	i;
 	int	y;
 	int	len;
-	int	tmpy;
 
-	len = game->win_height / ray->perp_dist;
-	y = game->win_height / 2 - len / 2;
+	len = (int)(128 * game->win_height / ray->dist.x);
+	ray->rtexture = set_texture(game, ray);
+	calculate_tx(ray);
+	ray->ratio = (double)ray->rtexture.height / (double)len;
 	i = 0;
-	while (y + i < y + len)
+	y = game->win_height / 2 - len / 2;
+	if (y < 0)
+		i = -y;
+	ray->ty = ray->ratio * i;
+	while (i < len - 1 && y + i < game->win_height)
 	{
-		tmpy = y + i;
-		my_mlx_pixel_put(game, x, tmpy, set_color(ray->side));
+		ray->ty += ray->ratio;
+		my_mlx_pixel_put(game, x, y + i,
+			get_text_pixel(&ray->rtexture, ray->tx, ray->ty));
 		i++;
 	}
 }
 
-static void	draw_background(t_game *game)
+void	draw_background(t_game *game)
 {
 	int	i;
 	int	j;
@@ -65,9 +71,11 @@ static void	draw_background(t_game *game)
 		while (j < game->win_width)
 		{
 			if (i < game->win_height / 2)
-				my_mlx_pixel_put(game, j, i, 0xC0DFEF);
+				my_mlx_pixel_put(game, j, i,
+					rgb_to_hexa(game->map_info.c_color));
 			else
-				my_mlx_pixel_put(game, j, i, 0x333333);
+				my_mlx_pixel_put(game, j, i,
+					rgb_to_hexa(game->map_info.f_color));
 			j++;
 		}
 		i++;
@@ -77,19 +85,25 @@ static void	draw_background(t_game *game)
 void	raycasting(t_game *game)
 {
 	int				nbr;
-	float			ra;
 	t_raycasting	ray;
-	t_point			col;
 
 	draw_background(game);
 	nbr = 0;
-	ra = game->pa + (M_PI / 3) / 2;
+	ray.ra = fixang(game->player.pa + ((M_PI / 180) * 25));
 	while (nbr < game->win_width)
 	{
-		ray = dda(game, ra);
-		col = create_vect(game->player, ra, ray.perp_dist);
+		dda(game, &ray);
+		if (ray.dist.y < ray.dist.x)
+		{
+			ray.ray.x = ray.vertical.x;
+			ray.ray.y = ray.vertical.y;
+			ray.dist.x = ray.dist.y;
+			ray.hcolor = ray.vcolor;
+		}
+		ray.col = create_vect(game->player.pos, ray.ra, ray.dist.x);
+		ray.dist.x = ray.dist.x * cos(ray.ra - game->player.pa);
 		draw_column(game, nbr, &ray);
-		ra -= fixang((M_PI / 3) / game->win_width);
 		nbr++;
+		ray.ra = fixang(ray.ra - ((M_PI / 180) * 50) / game->win_width);
 	}
 }

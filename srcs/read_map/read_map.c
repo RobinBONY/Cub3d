@@ -6,7 +6,7 @@
 /*   By: rbony <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/10 17:08:31 by rbony             #+#    #+#             */
-/*   Updated: 2022/09/07 12:33:03 by rbony            ###   ########lyon.fr   */
+/*   Updated: 2022/10/20 15:21:34 by rbony            ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,6 +57,8 @@ static t_list	*fill_map_list(char *mapname)
 
 int	parse_map(t_game *game, t_list *list)
 {
+	if (!list)
+		return (1);
 	if (check_map_layout(list, game))
 		return (1);
 	return (create_int_map(game, list));
@@ -72,11 +74,22 @@ static int	parse_file(t_game *game, char *mapname)
 		return (error_1(READING_FILE));
 	tmp = head;
 	if (parse_textures(game, &tmp))
-		return (1);
+	{
+		ft_lstclear(&head);
+		return (error_1(TEXTURE_NF));
+	}
 	if (parse_map(game, tmp))
+	{
+		ft_lstclear(&head);
 		return (error_1(INVALID_MAP));
+	}
 	ft_lstclear(&head);
-	print_data(game);
+	if (check_valid_cells(game->map, game, 0, 0))
+		return (error_1(INVALID_MAP));
+	if (game->player.pos.x == 0 && game->player.pos.y == 0)
+		return (error_1(MISS_P_POS));
+	if (!check_text_db(game))
+		return (error_1(MISS_TEXTURE));
 	return (0);
 }
 
