@@ -93,7 +93,11 @@ To find the first wall that a ray encounters on its way, you have to let it star
 
 If it's inside a wall (hit), then the loop can stop, calculate the distance, and draw the wall with the correct height. If the ray position is not in a wall, you have to trace it further: add a certain value to its position, in the direction of the direction of this ray, and for this new position, again check if it's inside a wall or not. 
 
-Keep doing this until a wall is finally hit.
+Keep doing this until a wall is finally hit, and call your pixel-put algorithm with the data you've gathered.
+
+# Resources
+
+For a more in-depth explanation, you should check bbischoff's raytracing guide at https://b-bischoff.github.io/web/cube3d.html
 
 # Result
 
